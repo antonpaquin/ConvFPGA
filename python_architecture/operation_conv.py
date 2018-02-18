@@ -1,6 +1,8 @@
-from reg_types import ImageBuffer, FilterBuffer
+from reg_types import ImageBuffer, FilterBuffer, FilterChannel, ImageChannel
 from operation import Operation
 from copy import deepcopy
+
+from operation_conv_layer import ConvLayer
 
 
 class Conv(Operation):
@@ -10,8 +12,18 @@ class Conv(Operation):
         self.filtr = filtr
 
     def run_fpga(self):
-        # This we need to implement
-        pass
+        for channel_out_no in range(self.filtr.num_channels_out):
+            filter_channel = FilterChannel(
+                start_address=self.filtr.start_address + (channel_out_no * self.filtr.channel_length),
+                filter_dimension=self.filtr.filter_dimension,
+                num_channels_in=self.filtr.num_channels_in,
+            )
+            output_channel = ImageChannel(
+                start_address=self.buffer_out.start_address + (channel_out_no * self.buffer_out.channel_length),
+                row_length=self.buffer_out.row_length,
+            )
+            c = ConvLayer(image_out=output_channel, image_in=self.buffer_in, filtr=filter_channel)
+            c.run_fpga()
 
     def run_python(self):
         img_in = self.buffer_in._get_image()
@@ -47,4 +59,3 @@ class Conv(Operation):
             output.append(deepcopy(output_layer))
 
         self.buffer_out._load_image(output)
-

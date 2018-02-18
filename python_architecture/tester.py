@@ -1,5 +1,8 @@
 from operation_conv import Conv
 from reg_types import ImageBuffer, FilterBuffer
+import memory
+import reg_types
+from copy import deepcopy
 
 im_test = (
     [
@@ -20,8 +23,6 @@ im_test = (
         ],
     ]
 )
-buf_in = ImageBuffer(0, 3, 3)
-buf_in._load_image(im_test)
 
 filter_test = (
     [
@@ -61,16 +62,42 @@ filter_test = (
         ]
     ]
 )
-filtr = FilterBuffer(28, 3, 3, 2)
-filtr._load_filter(filter_test)
 
+
+buf_in = ImageBuffer(0, 3, 3)
+filtr = FilterBuffer(28, 3, 3, 2)
 buf_out = ImageBuffer(83, 3, 2)
+
+buf_in._load_image(im_test)
+filtr._load_filter(filter_test)
 
 c = Conv(buf_out, buf_in, filtr)
 c.run_python()
+out_py = deepcopy(buf_out._get_image())
 
-out = buf_out._get_image()
-for oo in out:
-    for row in oo:
+print('Mem check, should be some value')
+print(sum(memory.memory[:1000]))
+memory.clear()
+print('Mem check, should be 0')
+print(sum(memory.memory[:1000]))
+print('')
+
+buf_in._load_image(im_test)
+filtr._load_filter(filter_test)
+
+c = Conv(buf_out, buf_in, filtr)
+c.run_fpga()
+out_vg = deepcopy(buf_out._get_image())
+
+print('Printing output:')
+for img in out_vg:
+    for row in img:
         print(row)
     print('')
+
+print('Memory dump')
+for i in range(15):
+    print('\t'.join([str(x) for x in memory.memory[i*10:i*10+10]]))
+
+if out_py == out_vg:
+    print('I think they match!')
