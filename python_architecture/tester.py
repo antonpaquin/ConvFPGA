@@ -101,3 +101,11 @@ for i in range(15):
 
 if out_py == out_vg:
     print('I think they match!')
+else:
+    print('Mismatch!')
+    print('fpga / python')
+    for vg_channel, py_channel in zip(out_vg, out_py):
+        for vg_row, py_row in zip(vg_channel, py_channel):
+            print(vg_row, end='\t')
+            print(py_row)
+        print('')

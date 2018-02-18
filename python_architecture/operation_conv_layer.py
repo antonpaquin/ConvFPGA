@@ -15,7 +15,7 @@ class ConvLayer(Operation):
                 coords = ImageCoords(x_pos=xx, y_pos=yy)
                 addr = Addr(address=self.image_out.start_address + self.image_out.row_length*yy + xx)
                 c = ConvOutput(addr_out=addr, image_in=self.image_in, coords=coords, filtr=self.filtr)
-                c.run_python()
+                c.run_fpga()
 
     def run_python(self):
         filtr_channel = self.filtr._get_filter()
