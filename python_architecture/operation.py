@@ -1,24 +1,15 @@
 class Operation:
-    pass
-
-
-class DSP:
     def __init__(self):
-        self.input_a = 0
-        self.input_b = 0
-        self.accumulator = 0
+        pass
 
-    def set_input_a(self, value):
-        self.input_a = value
+    def run_python(self):
+        pass
 
-    def set_input_b(self, value):
-        self.input_b = value
+    def run_fpga(self):
+        pass
 
-    def mac(self):
-        self.accumulator += self.input_a * self.input_b
 
-    def get_output(self):
-        return self.accumulator
+noop = Operation()
 
-    def clear(self):
-        self.accumulator = 0
+
+

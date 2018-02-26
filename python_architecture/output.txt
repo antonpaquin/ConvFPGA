@@ -1,0 +1,416 @@
+load.imagebuffer ib0 0 3 3
+load.filterbuffer fb0 28 3 3 2
+load.imagebuffer ib1 85 3 2
+conv ib1 ib0 fb0
+	domain.00: load.imagechannel ic0 85 3
+	domain.00: load.filterchannel fc0 28 3 3
+	domain.00: conv.layer ic0 fc0
+		lane.00: load.imagecoords ix0 0 0
+		lane.00: conv.output 85 ix0 fc0
+			dsp.000 dsp.clear
+			dsp.000 dsp.mac 1 1
+			dsp.000 dsp.mac 1 2
+			dsp.000 dsp.mac 1 4
+			dsp.000 dsp.mac 1 5
+			dsp.000 dsp.mac 0.2 10
+			dsp.000 dsp.mac 0.2 20
+			dsp.000 dsp.mac 0.2 40
+			dsp.000 dsp.mac 0.2 50
+			dsp.000 dsp.mac 0.3 100
+			dsp.000 dsp.mac 0.3 200
+			dsp.000 dsp.mac 0.3 400
+			dsp.000 dsp.mac 0.3 500
+			dsp.000 dsp.increment 10000
+			dsp.000 dsp.relu 0
+		lane.01: load.imagecoords ix0 1 0
+		lane.01: conv.output 86 ix0 fc0
+			dsp.001 dsp.clear
+			dsp.001 dsp.mac 1 1
+			dsp.001 dsp.mac 1 2
+			dsp.001 dsp.mac 1 3
+			dsp.001 dsp.mac 1 4
+			dsp.001 dsp.mac 1 5
+			dsp.001 dsp.mac 1 6
+			dsp.001 dsp.mac 0.2 10
+			dsp.001 dsp.mac 0.2 20
+			dsp.001 dsp.mac 0.2 30
+			dsp.001 dsp.mac 0.2 40
+			dsp.001 dsp.mac 0.2 50
+			dsp.001 dsp.mac 0.2 60
+			dsp.001 dsp.mac 0.3 100
+			dsp.001 dsp.mac 0.3 200
+			dsp.001 dsp.mac 0.3 300
+			dsp.001 dsp.mac 0.3 400
+			dsp.001 dsp.mac 0.3 500
+			dsp.001 dsp.mac 0.3 600
+			dsp.001 dsp.increment 10000
+			dsp.001 dsp.relu 0
+		lane.02: load.imagecoords ix0 2 0
+		lane.02: conv.output 87 ix0 fc0
+			dsp.002 dsp.clear
+			dsp.002 dsp.mac 1 2
+			dsp.002 dsp.mac 1 3
+			dsp.002 dsp.mac 1 5
+			dsp.002 dsp.mac 1 6
+			dsp.002 dsp.mac 0.2 20
+			dsp.002 dsp.mac 0.2 30
+			dsp.002 dsp.mac 0.2 50
+			dsp.002 dsp.mac 0.2 60
+			dsp.002 dsp.mac 0.3 200
+			dsp.002 dsp.mac 0.3 300
+			dsp.002 dsp.mac 0.3 500
+			dsp.002 dsp.mac 0.3 600
+			dsp.002 dsp.increment 10000
+			dsp.002 dsp.relu 0
+		lane.03: load.imagecoords ix0 0 1
+		lane.03: conv.output 88 ix0 fc0
+			dsp.003 dsp.clear
+			dsp.003 dsp.mac 1 1
+			dsp.003 dsp.mac 1 2
+			dsp.003 dsp.mac 1 4
+			dsp.003 dsp.mac 1 5
+			dsp.003 dsp.mac 1 7
+			dsp.003 dsp.mac 1 8
+			dsp.003 dsp.mac 0.2 10
+			dsp.003 dsp.mac 0.2 20
+			dsp.003 dsp.mac 0.2 40
+			dsp.003 dsp.mac 0.2 50
+			dsp.003 dsp.mac 0.2 70
+			dsp.003 dsp.mac 0.2 80
+			dsp.003 dsp.mac 0.3 100
+			dsp.003 dsp.mac 0.3 200
+			dsp.003 dsp.mac 0.3 400
+			dsp.003 dsp.mac 0.3 500
+			dsp.003 dsp.mac 0.3 700
+			dsp.003 dsp.mac 0.3 800
+			dsp.003 dsp.increment 10000
+			dsp.003 dsp.relu 0
+		lane.04: load.imagecoords ix0 1 1
+		lane.04: conv.output 89 ix0 fc0
+			dsp.004 dsp.clear
+			dsp.004 dsp.mac 1 1
+			dsp.004 dsp.mac 1 2
+			dsp.004 dsp.mac 1 3
+			dsp.004 dsp.mac 1 4
+			dsp.004 dsp.mac 1 5
+			dsp.004 dsp.mac 1 6
+			dsp.004 dsp.mac 1 7
+			dsp.004 dsp.mac 1 8
+			dsp.004 dsp.mac 1 9
+			dsp.004 dsp.mac 0.2 10
+			dsp.004 dsp.mac 0.2 20
+			dsp.004 dsp.mac 0.2 30
+			dsp.004 dsp.mac 0.2 40
+			dsp.004 dsp.mac 0.2 50
+			dsp.004 dsp.mac 0.2 60
+			dsp.004 dsp.mac 0.2 70
+			dsp.004 dsp.mac 0.2 80
+			dsp.004 dsp.mac 0.2 90
+			dsp.004 dsp.mac 0.3 100
+			dsp.004 dsp.mac 0.3 200
+			dsp.004 dsp.mac 0.3 300
+			dsp.004 dsp.mac 0.3 400
+			dsp.004 dsp.mac 0.3 500
+			dsp.004 dsp.mac 0.3 600
+			dsp.004 dsp.mac 0.3 700
+			dsp.004 dsp.mac 0.3 800
+			dsp.004 dsp.mac 0.3 900
+			dsp.004 dsp.increment 10000
+			dsp.004 dsp.relu 0
+		lane.05: load.imagecoords ix0 2 1
+		lane.05: conv.output 90 ix0 fc0
+			dsp.005 dsp.clear
+			dsp.005 dsp.mac 1 2
+			dsp.005 dsp.mac 1 3
+			dsp.005 dsp.mac 1 5
+			dsp.005 dsp.mac 1 6
+			dsp.005 dsp.mac 1 8
+			dsp.005 dsp.mac 1 9
+			dsp.005 dsp.mac 0.2 20
+			dsp.005 dsp.mac 0.2 30
+			dsp.005 dsp.mac 0.2 50
+			dsp.005 dsp.mac 0.2 60
+			dsp.005 dsp.mac 0.2 80
+			dsp.005 dsp.mac 0.2 90
+			dsp.005 dsp.mac 0.3 200
+			dsp.005 dsp.mac 0.3 300
+			dsp.005 dsp.mac 0.3 500
+			dsp.005 dsp.mac 0.3 600
+			dsp.005 dsp.mac 0.3 800
+			dsp.005 dsp.mac 0.3 900
+			dsp.005 dsp.increment 10000
+			dsp.005 dsp.relu 0
+		lane.06: load.imagecoords ix0 0 2
+		lane.06: conv.output 91 ix0 fc0
+			dsp.006 dsp.clear
+			dsp.006 dsp.mac 1 4
+			dsp.006 dsp.mac 1 5
+			dsp.006 dsp.mac 1 7
+			dsp.006 dsp.mac 1 8
+			dsp.006 dsp.mac 0.2 40
+			dsp.006 dsp.mac 0.2 50
+			dsp.006 dsp.mac 0.2 70
+			dsp.006 dsp.mac 0.2 80
+			dsp.006 dsp.mac 0.3 400
+			dsp.006 dsp.mac 0.3 500
+			dsp.006 dsp.mac 0.3 700
+			dsp.006 dsp.mac 0.3 800
+			dsp.006 dsp.increment 10000
+			dsp.006 dsp.relu 0
+		lane.07: load.imagecoords ix0 1 2
+		lane.07: conv.output 92 ix0 fc0
+			dsp.007 dsp.clear
+			dsp.007 dsp.mac 1 4
+			dsp.007 dsp.mac 1 5
+			dsp.007 dsp.mac 1 6
+			dsp.007 dsp.mac 1 7
+			dsp.007 dsp.mac 1 8
+			dsp.007 dsp.mac 1 9
+			dsp.007 dsp.mac 0.2 40
+			dsp.007 dsp.mac 0.2 50
+			dsp.007 dsp.mac 0.2 60
+			dsp.007 dsp.mac 0.2 70
+			dsp.007 dsp.mac 0.2 80
+			dsp.007 dsp.mac 0.2 90
+			dsp.007 dsp.mac 0.3 400
+			dsp.007 dsp.mac 0.3 500
+			dsp.007 dsp.mac 0.3 600
+			dsp.007 dsp.mac 0.3 700
+			dsp.007 dsp.mac 0.3 800
+			dsp.007 dsp.mac 0.3 900
+			dsp.007 dsp.increment 10000
+			dsp.007 dsp.relu 0
+		lane.08: load.imagecoords ix0 2 2
+		lane.08: conv.output 93 ix0 fc0
+			dsp.008 dsp.clear
+			dsp.008 dsp.mac 1 5
+			dsp.008 dsp.mac 1 6
+			dsp.008 dsp.mac 1 8
+			dsp.008 dsp.mac 1 9
+			dsp.008 dsp.mac 0.2 50
+			dsp.008 dsp.mac 0.2 60
+			dsp.008 dsp.mac 0.2 80
+			dsp.008 dsp.mac 0.2 90
+			dsp.008 dsp.mac 0.3 500
+			dsp.008 dsp.mac 0.3 600
+			dsp.008 dsp.mac 0.3 800
+			dsp.008 dsp.mac 0.3 900
+			dsp.008 dsp.increment 10000
+			dsp.008 dsp.relu 0
+	domain.01: load.imagechannel ic0 94 3
+	domain.01: load.filterchannel fc0 56 3 3
+	domain.01: conv.layer ic0 fc0
+		lane.10: load.imagecoords ix0 0 0
+		lane.10: conv.output 94 ix0 fc0
+			dsp.010 dsp.clear
+			dsp.010 dsp.mac 0 1
+			dsp.010 dsp.mac 0 2
+			dsp.010 dsp.mac 0 4
+			dsp.010 dsp.mac 0 5
+			dsp.010 dsp.mac 0 10
+			dsp.010 dsp.mac 0 20
+			dsp.010 dsp.mac 0 40
+			dsp.010 dsp.mac 0 50
+			dsp.010 dsp.mac 0 100
+			dsp.010 dsp.mac 0 200
+			dsp.010 dsp.mac 0 400
+			dsp.010 dsp.mac 0 500
+			dsp.010 dsp.increment -4
+			dsp.010 dsp.relu 0
+		lane.11: load.imagecoords ix0 1 0
+		lane.11: conv.output 95 ix0 fc0
+			dsp.011 dsp.clear
+			dsp.011 dsp.mac 0 1
+			dsp.011 dsp.mac 0 2
+			dsp.011 dsp.mac 0 3
+			dsp.011 dsp.mac 0 4
+			dsp.011 dsp.mac 0 5
+			dsp.011 dsp.mac 0 6
+			dsp.011 dsp.mac 0 10
+			dsp.011 dsp.mac 0 20
+			dsp.011 dsp.mac 0 30
+			dsp.011 dsp.mac 0 40
+			dsp.011 dsp.mac 0 50
+			dsp.011 dsp.mac 0 60
+			dsp.011 dsp.mac 0 100
+			dsp.011 dsp.mac 0 200
+			dsp.011 dsp.mac 0 300
+			dsp.011 dsp.mac 0 400
+			dsp.011 dsp.mac 0 500
+			dsp.011 dsp.mac 0 600
+			dsp.011 dsp.increment -4
+			dsp.011 dsp.relu 0
+		lane.12: load.imagecoords ix0 2 0
+		lane.12: conv.output 96 ix0 fc0
+			dsp.012 dsp.clear
+			dsp.012 dsp.mac 0 2
+			dsp.012 dsp.mac 0 3
+			dsp.012 dsp.mac 0 5
+			dsp.012 dsp.mac 0 6
+			dsp.012 dsp.mac 0 20
+			dsp.012 dsp.mac 0 30
+			dsp.012 dsp.mac 0 50
+			dsp.012 dsp.mac 0 60
+			dsp.012 dsp.mac 0 200
+			dsp.012 dsp.mac 0 300
+			dsp.012 dsp.mac 0 500
+			dsp.012 dsp.mac 0 600
+			dsp.012 dsp.increment -4
+			dsp.012 dsp.relu 0
+		lane.13: load.imagecoords ix0 0 1
+		lane.13: conv.output 97 ix0 fc0
+			dsp.013 dsp.clear
+			dsp.013 dsp.mac 0 1
+			dsp.013 dsp.mac 1 2
+			dsp.013 dsp.mac 0 4
+			dsp.013 dsp.mac 0 5
+			dsp.013 dsp.mac 0 7
+			dsp.013 dsp.mac 0 8
+			dsp.013 dsp.mac 0 10
+			dsp.013 dsp.mac 0 20
+			dsp.013 dsp.mac 0 40
+			dsp.013 dsp.mac 0 50
+			dsp.013 dsp.mac 0 70
+			dsp.013 dsp.mac 0 80
+			dsp.013 dsp.mac 0 100
+			dsp.013 dsp.mac 0 200
+			dsp.013 dsp.mac 0 400
+			dsp.013 dsp.mac 0 500
+			dsp.013 dsp.mac 0 700
+			dsp.013 dsp.mac 0 800
+			dsp.013 dsp.increment -4
+			dsp.013 dsp.relu 0
+		lane.14: load.imagecoords ix0 1 1
+		lane.14: conv.output 98 ix0 fc0
+			dsp.014 dsp.clear
+			dsp.014 dsp.mac 0 1
+			dsp.014 dsp.mac 0 2
+			dsp.014 dsp.mac 1 3
+			dsp.014 dsp.mac 0 4
+			dsp.014 dsp.mac 0 5
+			dsp.014 dsp.mac 0 6
+			dsp.014 dsp.mac 0 7
+			dsp.014 dsp.mac 0 8
+			dsp.014 dsp.mac 0 9
+			dsp.014 dsp.mac 0 10
+			dsp.014 dsp.mac 0 20
+			dsp.014 dsp.mac 0 30
+			dsp.014 dsp.mac 0 40
+			dsp.014 dsp.mac 0 50
+			dsp.014 dsp.mac 0 60
+			dsp.014 dsp.mac 0 70
+			dsp.014 dsp.mac 0 80
+			dsp.014 dsp.mac 0 90
+			dsp.014 dsp.mac 0 100
+			dsp.014 dsp.mac 0 200
+			dsp.014 dsp.mac 0 300
+			dsp.014 dsp.mac 0 400
+			dsp.014 dsp.mac 0 500
+			dsp.014 dsp.mac 0 600
+			dsp.014 dsp.mac 0 700
+			dsp.014 dsp.mac 0 800
+			dsp.014 dsp.mac 0 900
+			dsp.014 dsp.increment -4
+			dsp.014 dsp.relu 0
+		lane.15: load.imagecoords ix0 2 1
+		lane.15: conv.output 99 ix0 fc0
+			dsp.015 dsp.clear
+			dsp.015 dsp.mac 0 2
+			dsp.015 dsp.mac 0 3
+			dsp.015 dsp.mac 0 5
+			dsp.015 dsp.mac 0 6
+			dsp.015 dsp.mac 0 8
+			dsp.015 dsp.mac 0 9
+			dsp.015 dsp.mac 0 20
+			dsp.015 dsp.mac 0 30
+			dsp.015 dsp.mac 0 50
+			dsp.015 dsp.mac 0 60
+			dsp.015 dsp.mac 0 80
+			dsp.015 dsp.mac 0 90
+			dsp.015 dsp.mac 0 200
+			dsp.015 dsp.mac 0 300
+			dsp.015 dsp.mac 0 500
+			dsp.015 dsp.mac 0 600
+			dsp.015 dsp.mac 0 800
+			dsp.015 dsp.mac 0 900
+			dsp.015 dsp.increment -4
+			dsp.015 dsp.relu 0
+		lane.16: load.imagecoords ix0 0 2
+		lane.16: conv.output 100 ix0 fc0
+			dsp.016 dsp.clear
+			dsp.016 dsp.mac 0 4
+			dsp.016 dsp.mac 1 5
+			dsp.016 dsp.mac 0 7
+			dsp.016 dsp.mac 0 8
+			dsp.016 dsp.mac 0 40
+			dsp.016 dsp.mac 0 50
+			dsp.016 dsp.mac 0 70
+			dsp.016 dsp.mac 0 80
+			dsp.016 dsp.mac 0 400
+			dsp.016 dsp.mac 0 500
+			dsp.016 dsp.mac 0 700
+			dsp.016 dsp.mac 0 800
+			dsp.016 dsp.increment -4
+			dsp.016 dsp.relu 0
+		lane.17: load.imagecoords ix0 1 2
+		lane.17: conv.output 101 ix0 fc0
+			dsp.017 dsp.clear
+			dsp.017 dsp.mac 0 4
+			dsp.017 dsp.mac 0 5
+			dsp.017 dsp.mac 1 6
+			dsp.017 dsp.mac 0 7
+			dsp.017 dsp.mac 0 8
+			dsp.017 dsp.mac 0 9
+			dsp.017 dsp.mac 0 40
+			dsp.017 dsp.mac 0 50
+			dsp.017 dsp.mac 0 60
+			dsp.017 dsp.mac 0 70
+			dsp.017 dsp.mac 0 80
+			dsp.017 dsp.mac 0 90
+			dsp.017 dsp.mac 0 400
+			dsp.017 dsp.mac 0 500
+			dsp.017 dsp.mac 0 600
+			dsp.017 dsp.mac 0 700
+			dsp.017 dsp.mac 0 800
+			dsp.017 dsp.mac 0 900
+			dsp.017 dsp.increment -4
+			dsp.017 dsp.relu 0
+		lane.18: load.imagecoords ix0 2 2
+		lane.18: conv.output 102 ix0 fc0
+			dsp.018 dsp.clear
+			dsp.018 dsp.mac 0 5
+			dsp.018 dsp.mac 0 6
+			dsp.018 dsp.mac 0 8
+			dsp.018 dsp.mac 0 9
+			dsp.018 dsp.mac 0 50
+			dsp.018 dsp.mac 0 60
+			dsp.018 dsp.mac 0 80
+			dsp.018 dsp.mac 0 90
+			dsp.018 dsp.mac 0 500
+			dsp.018 dsp.mac 0 600
+			dsp.018 dsp.mac 0 800
+			dsp.018 dsp.mac 0 900
+			dsp.018 dsp.increment -4
+			dsp.018 dsp.relu 0
+load.imagebuffer ib0 104 2 2
+maxpool ib0 ib1
+	domain.00: load.imagechannel ic1 104 2
+	domain.00: maxpool.layer ic1 0
+		lane.00: load.imagecoords ix1 0 0
+		lane.00: maxpool.output 104 ix1 0
+		lane.01: load.imagecoords ix1 1 0
+		lane.01: maxpool.output 105 ix1 0
+		lane.02: load.imagecoords ix1 0 1
+		lane.02: maxpool.output 106 ix1 0
+		lane.03: load.imagecoords ix1 1 1
+		lane.03: maxpool.output 107 ix1 0
+	domain.01: load.imagechannel ic1 108 2
+	domain.01: maxpool.layer ic1 1
+		lane.10: load.imagecoords ix1 0 0
+		lane.10: maxpool.output 108 ix1 1
+		lane.11: load.imagecoords ix1 1 0
+		lane.11: maxpool.output 109 ix1 1
+		lane.12: load.imagecoords ix1 0 1
+		lane.12: maxpool.output 110 ix1 1
+		lane.13: load.imagecoords ix1 1 1
+		lane.13: maxpool.output 111 ix1 1

@@ -86,7 +86,7 @@ class FilterBuffer(Register):
         self.start_address = start_address
         self.filter_dimension = filter_dimension
         self.filter_length = (filter_dimension ** 2)
-        self.channel_length = self.filter_length * num_channels_in
+        self.channel_length = self.filter_length * num_channels_in + 1
         self.num_channels_in = num_channels_in
         self.num_channels_out = num_channels_out
 
@@ -114,12 +114,14 @@ class FilterBuffer(Register):
 
     def _load_filter(self, filtr):
         ii = self.start_address
-        for channel_out in filtr:
+        for (channel_out, bias) in filtr:
             for channel_in in channel_out:
                 for row in channel_in:
                     for value in row:
                         memory.memory[ii] = value
                         ii += 1
+            memory.memory[ii] = bias
+            ii += 1
 
 
 class FilterChannel(Register):
