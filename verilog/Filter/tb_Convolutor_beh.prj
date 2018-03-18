@@ -1,0 +1,3 @@
+verilog work "Convolutor.v"
+verilog work "tb_Convolutor.v"
+verilog work "C:/Xilinx/14.2/ISE_DS/ISE//verilog/src/glbl.v"

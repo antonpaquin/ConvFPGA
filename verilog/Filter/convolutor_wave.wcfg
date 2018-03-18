@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="X:/Documents/Filter/tb_Convolutor_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="tb_Convolutor" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="12" />
+   <wvobject fp_name="/tb_Convolutor/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_Convolutor/rst" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_Convolutor/uut/conv00" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">conv00[47:0]</obj_property>
+      <obj_property name="ObjectShortName">conv00[47:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_Convolutor/uut/conv01" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">conv01[47:0]</obj_property>
+      <obj_property name="ObjectShortName">conv01[47:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_Convolutor/uut/conv10" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">conv10[47:0]</obj_property>
+      <obj_property name="ObjectShortName">conv10[47:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_Convolutor/uut/conv11" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">conv11[47:0]</obj_property>
+      <obj_property name="ObjectShortName">conv11[47:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_Convolutor/uut/fcol" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">fcol[1:0]</obj_property>
+      <obj_property name="ObjectShortName">fcol[1:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_Convolutor/uut/fdep" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">fdep[1:0]</obj_property>
+      <obj_property name="ObjectShortName">fdep[1:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_Convolutor/uut/irow" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">irow[1:0]</obj_property>
+      <obj_property name="ObjectShortName">irow[1:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_Convolutor/uut/icol" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">icol[1:0]</obj_property>
+      <obj_property name="ObjectShortName">icol[1:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_Convolutor/uut/idep" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">idep[1:0]</obj_property>
+      <obj_property name="ObjectShortName">idep[1:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_Convolutor/uut/frow" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">frow[1:0]</obj_property>
+      <obj_property name="ObjectShortName">frow[1:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+</wave_config>
