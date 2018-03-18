@@ -1,0 +1,29 @@
+Command line:
+   tb_Convolutor_isim_beh.exe
+     -simmode  gui
+     -simrunnum  0
+     -socket  57995
+
+Sat Mar 17 23:35:14 2018
+
+
+ Elaboration Time: 0.078 sec
+
+ Current Memory Usage: 506.077 Meg
+
+ Total Signals          : 459
+ Total Nets             : 4179
+ Total Signal Drivers   : 359
+ Total Blocks           : 19
+ Total Primitive Blocks : 5
+ Total Processes        : 617
+ Total Traceable Variables  : 608
+ Total Scalar Nets and Variables : 21759
+Total Line Count : 2680
+
+ Total Simulation Time: 0.140401 sec
+
+ Current Memory Usage: 506.077 Meg
+
+Sat Mar 17 23:36:37 2018
+

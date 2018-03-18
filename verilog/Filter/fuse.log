@@ -1,0 +1,20 @@
+Running: fuse.exe -relaunch -intstyle "ise" -incremental -lib "unisims_ver" -lib "unimacro_ver" -lib "xilinxcorelib_ver" -lib "secureip" -o "X:/Documents/Filter/tb_Convolutor_isim_beh.exe" -prj "X:/Documents/Filter/tb_Convolutor_beh.prj" "work.tb_Convolutor" "work.glbl" 
+ISim P.28xd (signature 0xa0883be4)
+Number of CPUs detected in this system: 4
+Turning on mult-threading, number of parallel sub-compilation jobs: 8 
+Determining compilation order of HDL files
+Analyzing Verilog file "X:/Documents/Filter/Convolutor.v" into library work
+Analyzing Verilog file "X:/Documents/Filter/tb_Convolutor.v" into library work
+Analyzing Verilog file "C:/Xilinx/14.2/ISE_DS/ISE//verilog/src/glbl.v" into library work
+Starting static elaboration
+Completed static elaboration
+Compiling module DSP48E1(ACASCREG=0,ADREG=0,AREG=...
+Compiling module MACC_MACRO(DEVICE="7SERIES",LATE...
+Compiling module Convolutor
+Compiling module tb_Convolutor
+Compiling module glbl
+Time Resolution for simulation is 1ps.
+Compiled 5 Verilog Units
+Built simulation executable X:/Documents/Filter/tb_Convolutor_isim_beh.exe
+Fuse Memory Usage: 35992 KB
+Fuse CPU Usage: 638 ms

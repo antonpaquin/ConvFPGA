@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="X:/Documents/Filter/tb_Macc_isim_beh.wdb" id="1" type="auto">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="tb_Macc" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="11" />
+   <wvobject fp_name="/tb_Macc/clk" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_Macc/rst" type="logic" db_ref_id="1">
+      <obj_property name="ElementShortName">rst</obj_property>
+      <obj_property name="ObjectShortName">rst</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_Macc/frow" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">frow[1:0]</obj_property>
+      <obj_property name="ObjectShortName">frow[1:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_Macc/fcol" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">fcol[1:0]</obj_property>
+      <obj_property name="ObjectShortName">fcol[1:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_Macc/irow" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">irow[1:0]</obj_property>
+      <obj_property name="ObjectShortName">irow[1:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_Macc/icol" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">icol[1:0]</obj_property>
+      <obj_property name="ObjectShortName">icol[1:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_Macc/image_pixel" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">image_pixel[17:0]</obj_property>
+      <obj_property name="ObjectShortName">image_pixel[17:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_Macc/uut/MACC_MACRO_inst/A" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">A[17:0]</obj_property>
+      <obj_property name="ObjectShortName">A[17:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_Macc/uut/MACC_MACRO_inst/B" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">B[17:0]</obj_property>
+      <obj_property name="ObjectShortName">B[17:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_Macc/uut/MACC_MACRO_inst/P" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">P[47:0]</obj_property>
+      <obj_property name="ObjectShortName">P[47:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+   <wvobject fp_name="/tb_Macc/activation" type="array" db_ref_id="1">
+      <obj_property name="ElementShortName">activation[47:0]</obj_property>
+      <obj_property name="ObjectShortName">activation[47:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+   </wvobject>
+</wave_config>

@@ -1,0 +1,7 @@
+Instantiate multiple Macc modules to do conv concurrently 
+
+Macc - ADD PARAMETERS FOR INOPUT AND OUTPUT SIZE (W-F+2P)/S+1
+ input volume size (W),
+ Conv Layer neurons (F)
+ padding used (P)
+ stride (S)
