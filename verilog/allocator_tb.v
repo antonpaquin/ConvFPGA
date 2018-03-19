@@ -10,6 +10,7 @@ module main();
     reg [17:0] filter_data;
 
     reg [ 7:0] center_x, center_y;
+    reg center_write_enable;
 
     reg [ 2:0] filter_dim;
 
@@ -25,8 +26,9 @@ module main();
         .filter_data(filter_data),
         .filter_blocked(1'b0),
 
-        .center_x(center_x),
-        .center_y(center_y),
+        .center_x_input(center_x),
+        .center_y_input(center_y),
+        .center_write_enable(center_write_enable),
 
         .filter_dim(filter_dim),
 
@@ -48,6 +50,8 @@ module main();
         center_x = 1;
         center_y = 1;
         filter_dim = 3;
+        center_write_enable = 1;
+        #10 center_write_enable = 0;
     end
 
     initial begin

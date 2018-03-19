@@ -20,8 +20,9 @@ module AllocatorController #(
         input  wire [12:0] filter_dsp_counter,
         output reg         filter_block,
 
-        input  wire [ 7:0] center_x,
-        input  wire [ 7:0] center_y,
+        input  wire [ 7:0] center_x_input,
+        input  wire [ 7:0] center_y_input,
+        input  wire        center_write_enable,
 
         input  wire [ 2:0] filter_dim,
         input  wire [17:0] filter_bias,
@@ -41,6 +42,9 @@ module AllocatorController #(
         input  wire        clk,
         input  wire        rst
     );
+
+    reg [7:0] center_x;
+    reg [7:0] center_y;
 
     wire [1:0] filter_halfsize;
     assign filter_halfsize = (filter_dim == 3) ? 1 : 2;
@@ -92,6 +96,14 @@ module AllocatorController #(
             ramb_b_data <= filter_data;
         end else begin
             ramb_b_write_en <= 0;
+        end
+    end
+
+    // Assign center x and y on enable
+    always @(posedge clk) begin
+        if (center_write_enable) begin
+            center_x <= center_x_input;
+            center_y <= center_y_input;
         end
     end
     

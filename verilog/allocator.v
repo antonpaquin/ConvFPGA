@@ -17,8 +17,9 @@ module Allocator(
         input  wire        filter_blocked,
         output wire        filter_block,
 
-        input  wire [ 7:0] center_x,
-        input  wire [ 7:0] center_y,
+        input  wire [ 7:0] center_x_input,
+        input  wire [ 7:0] center_y_input,
+        input  wire        center_write_enable,
 
         input  wire [ 2:0] filter_dim,
         input  wire [17:0] filter_bias,
@@ -68,8 +69,9 @@ module Allocator(
         .filter_dsp_counter(filter_dsp_counter),
         .filter_block(filter_block),
 
-        .center_x(center_x),
-        .center_y(center_y),
+        .center_x_input(center_x_input),
+        .center_y_input(center_y_input),
+        .center_write_enable(center_write_enable),
 
         .filter_dim(filter_dim),
         .filter_bias(filter_bias),
