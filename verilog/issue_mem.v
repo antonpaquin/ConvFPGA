@@ -18,7 +18,9 @@ module IssueMemory(
         
         input  wire        clk
     );
-    reg [17:0] memory [60*1024];
+
+    localparam memsize = 60*1024;
+    reg [17:0] memory [memsize-1:0];
 
     always @(posedge clk) read_data_a <= memory[read_addr_a];
     always @(posedge clk) read_data_b <= memory[read_addr_b];
@@ -34,6 +36,14 @@ module IssueMemory(
             memory[write_addr_b] <= write_data_b;
         end
     end
+
+    integer ii;
+    initial begin
+        for (ii=0; ii<memsize; ii=ii+1) begin
+            memory[ii] = 0;
+        end
+    end
+
 endmodule
 
 `endif // _include_issue_mem_

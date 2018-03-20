@@ -20,7 +20,7 @@ module IssuePositioner #(
         output reg  [ 7:0] y_max,
 
         input  wire        advance,
-        output wire        done,
+        output reg         done,
 
         input  wire        clk,
         input  wire        rst
@@ -29,7 +29,7 @@ module IssuePositioner #(
     reg [7:0] allocator_counter;
 
     always @(posedge clk) begin
-        if (rst) begin
+        if (rst || done) begin
             allocator_select <= 0;
         end else if (allocator_counter == 0) begin
             allocator_select[num_allocators-1] <= 0;
@@ -76,7 +76,9 @@ module IssuePositioner #(
             center_y
     );
 
-    assign done = (center_x == image_dim + padding) && (center_y == image_dim + padding);
+    always @(posedge clk) begin
+        done <= ((center_x == image_dim) && (center_y == image_dim));
+    end
 
     always @(posedge clk) begin
         if (rst) begin
@@ -91,10 +93,7 @@ module IssuePositioner #(
                 x_start <= center_x - padding;
                 y_min <= center_y - padding;
             end
-        end else if (allocator_counter < num_allocators) begin
-            center_x <= next_x;
-            center_y <= next_y;
-        end else if (allocator_counter == num_allocators) begin
+        end else if (allocator_counter <= num_allocators) begin
             center_x <= next_x;
             center_y <= next_y;
             x_end <= center_x + padding;

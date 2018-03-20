@@ -1,0 +1,45 @@
+Systolic array -- data is passed in at an edge and propagated through a
+network, as opposed to being passed to each element of the network.
+
+We're distributing the DSPs along a linear path, and also broadcasting the 
+image data along the same route. This means that, if each DSP has a connection
+to only one other DSP (the previous one), we can do systolic things. That's a
+pretty good number.
+
+The following forms of data are targets for systolic distribution:
+    
+
+filter data
+    It's guaranteed that even with ASAP scheduling each DSP unit will need
+        filter data at least one cycle after the previous unit.
+    Strides makes this a little weird -- each unit would have to buffer up to 
+        five (four?) filter weights -- but it still is very efficient and could
+        even remove the requirement of spending a Ramb18 per allocator
+    This is the first thing we should try when we get to optimization
+
+
+center positioning 
+    issue_positioner.v is actually really kludgy at the moment, requiring a lot
+        of connections to a lot of allocators
+    We could let each DSP compute its own position based on the position of the
+        preceding DSP
+    This would take time to propagate but because issue is in-order it would be
+        guaranteed to be done for each node before the first data arrives (if
+        we give the positioning a few cycles head start)
+
+
+image data is not a target --
+    1. With linear positioning, it would be too complex (for now) to share data
+        vertically
+        (If you come up with a clever system for this then share it)
+    2. There's no guarantee of which DSPs will be on the leftmost edge / entry
+        node after positioning wraps around
+    3. If we have stride, every DSP will have at least some weights that are
+        only distributed to that DSP --> we can't cut down on entry ports
+
+    It would be nice, but there are too many caveats and issues such that the
+        opportunity cost of running image data on systolic arrays is high
+        compared to other data
+
+
+Possibly more?
