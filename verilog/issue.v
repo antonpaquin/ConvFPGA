@@ -53,6 +53,9 @@ module Issue #(
                y_min,
                y_max;
 
+    wire [8:0] z_max;
+    assign z_max = image_depth - 1;
+
     wire [15:0] imem_read_addr_a;
     wire [17:0] imem_read_data_a;
 
@@ -61,12 +64,12 @@ module Issue #(
     localparam positioner_headstart = 5;
     reg  [2:0] positioner_headstart_counter;
 
+
     IssueBroadcast broadcast(
         .ramb_read_addr(imem_read_addr_a),
         .ramb_read_data(imem_read_data_a),
         
         .image_dim(image_dim),
-        .image_depth(image_depth),
         .image_padding(filter_halfsize),
 
         .x_min(x_min),
@@ -75,6 +78,7 @@ module Issue #(
         .x_end(x_end),
         .y_min(y_min),
         .y_max(y_max),
+        .z_max(z_max),
 
         .issue_block(|issue_block), // Notice: OR reduction
         .issue_en(issue_en),
@@ -134,16 +138,20 @@ module Issue #(
 
     always @(posedge clk) begin
         if (rst) begin
-            positioner_headstart_counter <= 0;
             broadcast_rst <= 1;
-        end else if (done) begin
-            broadcast_rst <= 1;
-        end else if (positioner_headstart_counter == 0 && !positioner_advance) begin
         end else if (positioner_headstart_counter == positioner_headstart) begin
             broadcast_rst <= 0;
+        end else if (broadcast_done) begin
+            broadcast_rst <= 1;
+        end
+    end
+
+    always @(posedge clk) begin
+        if (rst) begin
+            positioner_headstart_counter <= 0;
+        end else if (positioner_headstart_counter == 0 && !positioner_advance) begin
             positioner_headstart_counter <= 0;
         end else begin
-            broadcast_rst <= 1;
             positioner_headstart_counter <= positioner_headstart_counter + 1;
         end
     end

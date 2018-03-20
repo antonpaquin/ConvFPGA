@@ -8,7 +8,6 @@ module IssueBroadcast(
         input  wire [17:0] ramb_read_data,
 
         input  wire [ 7:0] image_dim,
-        input  wire [ 8:0] image_depth,
         input  wire [ 1:0] image_padding,
         
         input  wire [ 7:0] x_min,
@@ -17,6 +16,7 @@ module IssueBroadcast(
         input  wire [ 7:0] x_end,
         input  wire [ 7:0] y_min,
         input  wire [ 7:0] y_max,
+        input  wire [ 8:0] z_max,
 
         input  wire        issue_block,
         output reg         issue_en,
@@ -58,7 +58,7 @@ module IssueBroadcast(
     always @(posedge clk) begin
         if (rst) begin
             done <= 1'b0;
-        end else if (next_x == x_end && next_y == y_max && next_z == image_depth) begin
+        end else if (next_x == x_end && next_y == y_max && next_z == z_max) begin
             done <= 1'b1;
         end 
     end
@@ -73,7 +73,7 @@ module IssueBroadcast(
             if (issue_block) begin
             end else if (x_rectangle) begin
                 if (next_x == x_max) begin
-                    if (next_z != image_depth) begin
+                    if (next_z != z_max) begin
                         next_x <= x_start;
                         // For block issue, y never changes
                         next_z <= next_z + 1;
@@ -83,7 +83,7 @@ module IssueBroadcast(
                 end
             end else if (x_continuous) begin
                 if (next_x == x_end && next_y == y_max) begin
-                    if (next_z != image_depth) begin
+                    if (next_z != z_max) begin
                         next_x <= x_start;
                         next_y <= y_min;
                         next_z <= next_z + 1;
@@ -96,7 +96,7 @@ module IssueBroadcast(
                 end
             end else if (x_jump) begin
                 if (next_x == x_end && next_y == y_max) begin
-                    if (next_z != image_depth) begin
+                    if (next_z != z_max) begin
                         next_x <= x_start;
                         next_y <= y_min;
                         next_z <= next_z + 1;

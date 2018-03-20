@@ -28,6 +28,9 @@ module IssuePositioner #(
 
     reg [7:0] allocator_counter;
 
+    wire [7:0] position_bound;
+    assign position_bound = image_dim - 1 + padding;
+
     always @(posedge clk) begin
         if (rst || done) begin
             allocator_select <= 0;
@@ -58,26 +61,35 @@ module IssuePositioner #(
         end
     end
 
+    wire [7:0] advance_x;
+    wire [7:0] advance_y;
+    assign advance_x = center_x + stride;
+    assign advance_y = center_y + stride;
+
     wire [7:0] next_x;
     assign next_x = (
-        (center_y == image_dim - 1 + padding && center_x == image_dim - 1 + padding) ? 
+        (advance_x >= position_bound && advance_y >= position_bound) ? 
             center_x 
-        : (center_x == image_dim - 1 + padding) ?
+        : (advance_x >= position_bound) ?
             padding
         :
-            center_x + stride
+            advance_x
     );
 
     wire [7:0] next_y;
     assign next_y = (
-        (center_x == image_dim - 1 + padding && center_y < image_dim - 1 + padding) ?
-            center_y + stride
+        (advance_x >= position_bound && advance_y < position_bound) ?
+            advance_y
         : 
             center_y
     );
 
     always @(posedge clk) begin
-        done <= ((center_x == image_dim) && (center_y == image_dim));
+        if (rst) begin
+            done <= 0;
+        end else if ((allocator_select != 0) && (advance_x >= position_bound) && (advance_y >= position_bound)) begin
+            done <= 1;
+        end
     end
 
     always @(posedge clk) begin
