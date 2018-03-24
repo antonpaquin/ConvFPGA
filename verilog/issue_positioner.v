@@ -1,6 +1,28 @@
 `ifndef _include_issue_positioner
 `define _include_issue_positioner
 
+/*
+ * Positioner Module
+ *
+ * The positioner module tells the allocator units where to go. In order to
+ * not have 220x16 wires going from here to the allocators, we have 220
+ * allocator_select signals and a single center_x and center_y going to all of
+ * them. Positioner figures out where to put the next allocator and raises its
+ * select signal.
+ *
+ * Note that this entire module might be able to be optimized away by moving
+ * to systolic allocator positioning (see "systolics.txt").
+ *
+ * We also expose positioning signals that describe where the current round is
+ * positioned, so that broadcast knows which pixels to send to the allocators.
+ *
+ * Rounds are controlled by the "advance" signal and the allocator counter.
+ * When we're done positioning, we wait for the issue controller to decide to
+ * start the next round (when broadcast is done), at which point it will raise
+ * "advance", and we'll move on to the next round.
+ * The allocator counter counts how many allocators are left to assign in the
+ * current round, and if it's at 0 we're done positioning for the round.
+ */
 module IssuePositioner #(
         parameter num_allocators = 220
     ) (
@@ -25,7 +47,7 @@ module IssuePositioner #(
         input  wire        clk,
         input  wire        rst
     );
-
+    
     reg [7:0] allocator_counter;
 
     wire [7:0] position_bound;

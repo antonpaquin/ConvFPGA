@@ -2,17 +2,18 @@
 
 `include "issue.v"
 
-//`define go_fast
+`define go_fast
 
 module main();
 
-    localparam num_allocators  = 2;
+    localparam num_allocators  = 220;
+    localparam image_dim = 46;
 
-    reg [7:0]  image_width     = 8'd26;
+    reg [7:0]  image_width     = image_dim;
     reg [8:0]  image_depth     = 9'd3;
 
-    reg [1:0]  filter_halfsize = 2'd2;
-    reg [2:0]  filter_stride   = 3'd4;
+    reg [1:0]  filter_halfsize = 2'd1;
+    reg [2:0]  filter_stride   = 3'd1;
 
     reg clk, rst;
 
@@ -25,6 +26,8 @@ module main();
                positioner_y;
 
     wire [num_allocators-1:0] positioner_select;
+
+    wire issue_done;
 
 
     Issue #(
@@ -51,7 +54,7 @@ module main();
         .positioner_y(positioner_y),
         .positioner_select(positioner_select),
 
-        //.done(),
+        .done(issue_done),
 
         .clk(clk),
         .rst(rst)
@@ -67,15 +70,15 @@ module main();
         forever #1 clk = ~clk;
     end
 
-    reg [7:0] display [44:0][44:0];
-    reg [1:0] display_rows_faster [44:0];
-    reg [7:0] display_position [44:0][44:0];
+    reg [7:0] display [image_dim+2:0][image_dim+2:0];
+    reg [1:0] display_rows_faster [image_dim+2:0];
+    reg [7:0] display_position [image_dim+2:0][image_dim+2:0];
 
     integer ii, jj, xx, yy;
     initial begin
-        for (ii=0; ii<45; ii=ii+1) begin
+        for (ii=0; ii<image_dim+2; ii=ii+1) begin
             display_rows_faster[ii] = 2;
-            for (jj=0; jj<45; jj=jj+1) begin
+            for (jj=0; jj<image_dim+2; jj=jj+1) begin
                 display[ii][jj] = 32;
                 display_position[ii][jj] = 32;
             end
@@ -85,6 +88,12 @@ module main();
     initial begin
         $dumpfile("issue.vcd");
         $dumpvars(0, uut);
+    end
+
+    always @(posedge clk) begin
+        if (issue_done) begin
+            #3 $finish;
+        end
     end
     
     always @(posedge clk) begin
@@ -115,9 +124,9 @@ module main();
 
     always @(posedge clk) begin
         $write("\033[H");
-        for (ii=0; ii<45; ii=ii+1) begin
+        for (ii=0; ii<image_dim+2; ii=ii+1) begin
             if (display_rows_faster[ii]) begin
-                for (jj=0; jj<45; jj=jj+1) begin
+                for (jj=0; jj<image_dim+2; jj=jj+1) begin
                     $write("%c%c", display_position[ii][jj], display[ii][jj]);
                 end
                 `ifdef go_fast
