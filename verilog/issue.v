@@ -60,6 +60,10 @@
  *
  * 4. Allocators currently don't store their outputs anywhere. We may have to
  * find a way to propagate those values back up through this module.
+ *
+ * 5. We aren't currently dealing with filter weights at all. Do we want to do
+ * this with another copy of the issue stage, or by doing both a filter issue
+ * and an image issue in the same module?
  */
 
 module Issue #(
