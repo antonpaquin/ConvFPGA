@@ -1,0 +1,24 @@
+# This is to calcuate the size of network after each layers.
+# Building 'AlexNet'
+network = input_data(shape=[None, 227, 227, 3]) → 227x227x3
+network = conv_2d(network, 96, 5, strides=2, activation='relu')  → 112x112x96
+network = conv_2d(network, 96, 5, strides=2, activation='relu') → 54x54x96
+network = max_pool_2d(network, 3, strides=2) → 27x27x96
+network = local_response_normalization(network) → 27x27x96 (Every layer it will learn 96x2)
+network = conv_2d(network, 256, 5, activation='relu') → 23x23x256
+network = max_pool_2d(network, 3, strides=2) → 11x11x256
+network = local_response_normalization(network) → 11x11x256
+network = conv_2d(network, 384, 3, activation='relu') → 11x11x384
+network = conv_2d(network, 384, 3, activation='relu') → 11x11x384
+network = conv_2d(network, 256, 3, activation='relu') → 11x11x256
+network = max_pool_2d(network, 3, strides=2) → 5x5x256
+network = local_response_normalization(network) → 5x5x256
+network = fully_connected(network, 4096, activation='tanh') → from 6400 → 4096 Dropping half features
+network = dropout(network, 0.5) →  from 6400 → 4096
+network = fully_connected(network, 4096, activation='tanh') → 4096 
+network = dropout(network, 0.5) → 
+network = fully_connected(network, 17, activation='softmax') → no of classes
+network = regression(network, optimizer='momentum',
+                     loss='categorical_crossentropy',
+                     learning_rate=0.001)
+
