@@ -1,6 +1,7 @@
 `timescale 1ns / 1ns
 
 `include "issue.v"
+`include "memory.v"
 
 /* Issue Test Bench
  * 
@@ -16,7 +17,7 @@
 // You can set this if you like -- it makes simulation faster by only
 // redrawing lines that have been updated
 // Comment out if you suspect it is causing issues
-`define go_fast
+//`define go_fast
 
 module main();
     // SIMULATION PARAMS
@@ -53,6 +54,10 @@ module main();
     // And is the issue currently active
     wire       issue_en;
 
+    // Connection to main memory
+    wire [15:0] imem_read_addr;
+    wire [17:0] imem_read_data;
+
     // What pixel is the center of the current positioner signal
     wire [7:0] positioner_x,
                positioner_y;
@@ -61,17 +66,33 @@ module main();
     
     // Done when the entire thing completes
     wire issue_done;
+    
+
+    // Memory unit -- an issue stage takes 1 read signal from main memory
+    Memory memory (
+        .read_addr_a(imem_read_addr),
+        .read_data_a(imem_read_data)
+        
+        // We don't need the rest of these signals for this test
+        //.read_addr_b(),
+        //.read_data_b(),
+
+        //.write_addr_a(),
+        //.write_data_a(),
+        //.write_en_a(),
+
+        //.write_addr_b(),
+        //.write_data_b(),
+        //.write_en_b(),
+    );
 
     // Our issue stage, which could eventually be exposed above
     Issue #(
         .num_allocators(num_allocators)
     ) uut (
-        // We don't actually care about writing anything to memory at this
-        // point -- that will come when we actually read data. This simulation
-        // is fine broadcasting all zeroes.
-        //.imem_write_addr_a(), 
-        //.imem_write_data_a(),
-        .imem_write_en_a(1'b0),
+        // Issue needs access to memory, even if it's all zeroed for the test
+        .imem_read_addr(imem_read_addr),
+        .imem_read_data(imem_read_data),
         
         // "constant" image params that need to be sent to Issue
         .image_dim(image_width),

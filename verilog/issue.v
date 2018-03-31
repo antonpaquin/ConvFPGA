@@ -2,7 +2,6 @@
 `define _include_issue_
 
 `include "issue_broadcast.v"
-`include "issue_mem.v"
 `include "issue_positioner.v"
 
 /*
@@ -31,8 +30,6 @@
  *
  * IssuePositioner controls the positioning phase of this design.
  * IssueBroadcast controls the image data portion.
- * IssueMemory is an approximation of the image storage memory that will
- *   eventually be used in the final design.
  *
  * This module contains and connects the above modules, and manages the reset
  * signals that allow for multiple rounds of execution.
@@ -72,13 +69,13 @@ module Issue #(
         parameter num_allocators = 220
     ) (
         // Issue requires read access to image memory. In this implementation,
-        // we hold the memory within the module and expose the write signals
-        // to allow it to be written to. 
-        // We could also accomplish this by importing the read signals.
+        // we hold the main memory in the top level module, and accept read
+        // signals. 
+        // We could also accomplish this by holding the memory here and export
+        // write signals.
         // Decision left up to the implementer.
-        input  wire [15:0] imem_write_addr_a,
-        input  wire [17:0] imem_write_data_a,
-        input  wire        imem_write_en_a,
+        output wire [15:0] imem_read_addr,
+        output wire [17:0] imem_read_data,
 
         // Dimensions of the image currently being worked on. Dim goes from
         // 13x13 to 224x224, and depth goes from 3 to 384. 
@@ -155,12 +152,6 @@ module Issue #(
     wire [8:0] z_max;
     assign z_max = image_depth - 1;
 
-    // Wires for the internal image memory read signals. As per the note on
-    // the imem_write input signals, we could import this signal and put the
-    // image memory as a higher level module.
-    wire [15:0] imem_read_addr_a;
-    wire [17:0] imem_read_data_a;
-
     // The positioner needs a bit of a head start on broadcast, so that each
     // allocator knows its position before it gets any values. We'll use
     // a counter that starts counting as soon as the positioner starts, and
@@ -170,8 +161,8 @@ module Issue #(
 
     // Broadcast stage, walks through the image data and puts out values
     IssueBroadcast broadcast(
-        .ramb_read_addr(imem_read_addr_a),
-        .ramb_read_data(imem_read_data_a),
+        .ramb_read_addr(imem_read_addr),
+        .ramb_read_data(imem_read_data),
         
         .image_dim(image_dim),
         .image_padding(filter_halfsize),
@@ -222,29 +213,6 @@ module Issue #(
 
         .clk(clk),
         .rst(positioner_rst_or)
-    );
-    
-    // Image memory, stores as much of the image as possible and makes it
-    // available for broadcast
-    // The "B" line is currently not connected, because it's not necessary,
-    // but we could use it to improve performance.
-    // As above, this module could be moved to a higher level in the hierarchy
-    IssueMemory memory(
-        .read_addr_a(imem_read_addr_a),
-        .read_data_a(imem_read_data_a),
-
-        //.read_addr_b(),
-        //.read_data_b(),
-
-        .write_addr_a(imem_write_addr_a),
-        .write_data_a(imem_write_data_a),
-        .write_en_a(imem_write_en_a),
-
-        //.write_addr_b(),
-        //.write_data_b(),
-        //.write_en_b(),
-
-        .clk(clk)
     );
 
     // Control broadcast_rst

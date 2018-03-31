@@ -1,9 +1,9 @@
-`ifndef _include_issue_mem_
-`define _include_issue_mem_
+`ifndef _include_memory_
+`define _include_memory_
 
 /*
- * Issue_memory is a model of the image memory we'll eventually use on our
- * board. It's a fairly standard memory model.
+ * Memory is a model of the image memory we'll eventually use on our board. 
+ * It's a fairly standard memory model.
  *
  * We're modeled off the xilinx RAM18 blocks, which store 1024 18-bit words
  * with 2 read signals and 2 write signals per cycle. Reading and writing from 
@@ -13,7 +13,7 @@
  * to DSPs (one per DSP). We could free up half of these by moving DSPs to
  * systolic filter data (see "systolics.txt").
  */
-module IssueMemory(
+module Memory(
         input  wire [15:0] read_addr_a,
         output reg  [17:0] read_data_a,
 
@@ -62,4 +62,4 @@ module IssueMemory(
 
 endmodule
 
-`endif // _include_issue_mem_
+`endif // _include_memory_
