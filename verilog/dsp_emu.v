@@ -32,7 +32,7 @@ module DspEmu(
         endcase
         // This is a debug line so we can see MAC operations as they happen,
         // which will be good for debugging, but we might remove it if it gets spammy
-        if (op == `DSP_INSTRUCTION_MAC) $display("MAC (%d * %d)", a, b);
+        //if (op == `DSP_INSTRUCTION_MAC) $display("MAC (%d * %d)", a, b);
     end
 
 endmodule

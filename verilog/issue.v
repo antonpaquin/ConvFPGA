@@ -73,9 +73,8 @@ module Issue #(
         // signals. 
         // We could also accomplish this by holding the memory here and export
         // write signals.
-        // Decision left up to the implementer.
         output wire [15:0] imem_read_addr,
-        output wire [17:0] imem_read_data,
+        input  wire [17:0] imem_read_data,
 
         // Dimensions of the image currently being worked on. Dim goes from
         // 13x13 to 224x224, and depth goes from 3 to 384. 

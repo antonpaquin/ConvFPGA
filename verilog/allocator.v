@@ -59,7 +59,7 @@ module Allocator(
         
         // Filter information
         // This is the size of the filter -- 5, or 3
-        input  wire [ 2:0] filter_dim,
+        input  wire [ 1:0] filter_halfsize,
         // The bias that will be added to the pixel once all MACCs have run
         input  wire [17:0] filter_bias,
         // The number of total operations in the filter =W*H*D
@@ -138,7 +138,7 @@ module Allocator(
         .center_write_enable(center_write_enable),
         
         // Information about the filter 
-        .filter_dim(filter_dim), // How wide / tall
+        .filter_halfsize(filter_halfsize), // How wide / tall
         .filter_length(filter_length), // How deep
         .filter_bias(filter_bias), // What bias to apply
         // Note that the leak factor is implemented as a module parameter --

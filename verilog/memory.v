@@ -56,7 +56,11 @@ module Memory(
     integer ii;
     initial begin
         for (ii=0; ii<memsize; ii=ii+1) begin
-            memory[ii] = 0;
+            `ifdef memory_init_dec
+                memory[ii] = ii*10;
+            `else // memory_init_dec
+                memory[ii] = 0;
+            `endif // memory_init_dec
         end
     end
 

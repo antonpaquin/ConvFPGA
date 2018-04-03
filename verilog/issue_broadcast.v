@@ -78,7 +78,7 @@ module IssueBroadcast(
         // along the image. 
         output reg  [ 7:0] current_x,
         output reg  [ 7:0] current_y,
-        output reg  [17:0] current_data,
+        output wire [17:0] current_data,
         
         // When all pixels for this round have been sent, raise "done"
         output reg         done,
@@ -119,7 +119,12 @@ module IssueBroadcast(
     reg [7:0] next_x;
     reg [7:0] next_y;
     reg [8:0] next_z;
-    
+
+    // Usually we want to take image data straight from the memory, but
+    // sometimes we want to be zeroed (when we're in the padding zone)
+    reg data_padding;
+    assign current_data = data_padding ? 0 : ramb_read_data;
+
     // Done detection
     always @(posedge clk) begin
         // Start off done is 0
@@ -260,11 +265,11 @@ module IssueBroadcast(
             next_x >= image_dim + image_padding  || 
             next_y >= image_dim + image_padding
         ) begin
-            current_data <= 0;
+            data_padding <= 1;
 
         // Otherwise, send the value from memory
         end else begin
-            current_data <= ramb_read_data;
+            data_padding <= 0;
         end
     end
 

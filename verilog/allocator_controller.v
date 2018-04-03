@@ -81,7 +81,7 @@ module AllocatorController #(
         
         // Constant data about the filter, which we can use to compute the 
         // counter maximum and to apply the bias
-        input  wire [ 2:0] filter_dim,
+        input  wire [ 1:0] filter_halfsize,
         input  wire [17:0] filter_bias,
         input  wire [12:0] filter_length,
         
@@ -111,11 +111,6 @@ module AllocatorController #(
     reg [7:0] center_x;
     reg [7:0] center_y;
 
-    // The halfsize of the filter -- distance of the edge of the filter from
-    // the center, 2 for a 5x5 and 1 for a 3x3
-    wire [1:0] filter_halfsize;
-    assign filter_halfsize = (filter_dim == 3) ? 1 : 2;
-    
     // Signals describing whether the current issue position is within our
     // range.
     wire issue_a_xrange;
