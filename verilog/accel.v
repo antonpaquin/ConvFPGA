@@ -48,6 +48,7 @@ module Accel(
     wire        issue_en;
     wire        issue_block;
     wire        issue_done;
+    reg         issue_advance;
 
     wire [7:0] positioner_x;
     wire [7:0] positioner_y;
@@ -58,6 +59,14 @@ module Accel(
     wire        filter_block;
     wire        filter_en;
     wire        filter_done;
+
+    wire        round_done;
+    wire [17:0] round_data;
+
+    reg  allocator_rst;
+    wire allocator_rst_or;
+
+    assign allocator_rst_or = rst | allocator_rst;
 
     assign done = issue_done && filter_done;
 
@@ -83,7 +92,8 @@ module Accel(
         .positioner_x(positioner_x),
         .positioner_y(positioner_y),
         .positioner_select(positioner_sel),
-
+        
+        .advance(issue_advance),
         .done(issue_done), // !
         
         .clk(clk),
@@ -129,11 +139,11 @@ module Accel(
         .filter_bias(filter_bias),
         .filter_length(filter_length),
 
-        //.result_ready(),
-        //.result_data(),
+        .result_ready(round_done),
+        .result_data(round_data),
 
         .clk(clk),
-        .rst(rst)
+        .rst(allocator_rst_or)
     );
 
     Memory memory (
@@ -153,6 +163,29 @@ module Accel(
 
         .clk(clk)
     );
+
+    always @(posedge clk) begin
+        if (rst) begin
+            issue_advance <= 1;
+        end else if (issue_advance) begin
+            issue_advance <= 0;
+        end else if (round_done) begin
+            issue_advance <= 1;
+        end
+    end
+
+    always @(posedge clk) begin
+        if (rst) begin
+            allocator_rst <= 0;
+        end else if (round_done) begin
+            allocator_rst <= 1;
+            if (!allocator_rst) begin
+                $display("DSP emits: %d", round_data);
+            end
+        end else begin
+            allocator_rst <= 0;
+        end
+    end
 
 endmodule
 

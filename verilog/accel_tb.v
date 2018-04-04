@@ -19,7 +19,7 @@ module main();
 
         .filter_halfsize(2'd1),
         .filter_stride(3'd1),
-        .filter_length(13'd45),
+        .filter_length(13'd27),
         .filter_bias(18'd100),
 
         .done(done),

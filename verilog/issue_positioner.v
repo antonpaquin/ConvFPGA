@@ -1,5 +1,5 @@
-`ifndef _include_issue_positioner
-`define _include_issue_positioner
+`ifndef _include_positioner
+`define _include_positioner
 
 /*
  * Positioner Module
@@ -263,4 +263,4 @@ module IssuePositioner #(
         end
     end
 endmodule
-`endif // _include_issue_positioner
+`endif // _include_positioner

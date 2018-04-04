@@ -100,6 +100,7 @@ module Allocator(
     
     // Raw output from the DSP
     wire [47:0] result;
+    assign result_data = result[17:0];
         
     // The main controller of the allocater unit -- takes in data from issue
     // stage, and puts it into the ramb and dsp_controller units
@@ -155,11 +156,6 @@ module Allocator(
         .ramb_b_data(ramb_writ_b_data),
         .ramb_b_addr(ramb_writ_b_addr),
         
-        // We're not currently sending the result_ready or result_data signals
-        // This needs to be implemented at some point -- see TODO #1
-        //.result_ready(???),
-        //.result_data(???),
-        
         .clk(clk),
         .rst(rst)
     );
@@ -181,9 +177,11 @@ module Allocator(
         // And these synchronize filter data
         .filter_issue_counter(filter_issue_counter),
         .filter_dsp_counter(filter_dsp_counter),
+        .filter_length(filter_length),
         
         // Result of the DSP48 -- "P" -- as a 48 bit number
         .result(result),
+        .result_ready(result_ready),
 
         .clk(clk),
         .rst(rst)

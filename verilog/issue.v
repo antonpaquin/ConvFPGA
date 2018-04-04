@@ -108,6 +108,8 @@ module Issue #(
         output wire [ 7:0] positioner_y,
         output wire [num_allocators-1:0] positioner_select,
         
+        input  wire        advance,
+        output reg         round_done,
         // Done -- when all pixels in the image have been positioned,
         // broadcast through the full depth of the image, and output returned.
         output reg         done,
@@ -271,11 +273,22 @@ module Issue #(
         
         // Or if broadcast has finished its processing for the round, move on
         // to the next round
-        end else if (broadcast_done) begin
+        end else if (round_done && advance) begin
             positioner_advance <= 1;
 
         // Otherwise, hold state
         end
     end
+
+    always @(posedge clk) begin
+        if (rst) begin
+            round_done <= 0;
+        end else if (broadcast_done) begin
+            round_done <= 1;
+        end else if (advance) begin
+            round_done <= 0;
+        end
+    end
+
 endmodule
 `endif // _include_issue_

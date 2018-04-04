@@ -29,9 +29,11 @@ module DspController(
         // As above, counters for the filter side of things
         input  wire [12:0] filter_issue_counter,
         output reg  [12:0] filter_dsp_counter,
+        input  wire [12:0] filter_length,
         
         // Raw 48-bit result of the DSP
         output wire [47:0] result,
+        output reg         result_ready,
 
         input  wire        clk,
         input  wire        rst
@@ -42,6 +44,9 @@ module DspController(
     // memory
     reg [ 1:0] dsp_op;
     reg [ 1:0] dsp_op_next;
+
+    reg [2:0] pipeline_delay_result_counter;
+    localparam pipeline_delay_result = 5;
     
     // Main operation of the DSP controller
     always @(posedge clk) begin
@@ -78,6 +83,19 @@ module DspController(
             dsp_op <= `DSP_INSTRUCTION_CLR;
         end else begin
             dsp_op <= dsp_op_next;
+        end
+    end
+
+    always @(posedge clk) begin
+        if (rst) begin
+            result_ready <= 0;
+            pipeline_delay_result_counter <= 0;
+        end else if (filter_dsp_counter == filter_length) begin
+            if (pipeline_delay_result_counter == pipeline_delay_result) begin
+                result_ready <= 1;
+            end else begin
+                pipeline_delay_result_counter <= pipeline_delay_result_counter + 1;
+            end
         end
     end
     

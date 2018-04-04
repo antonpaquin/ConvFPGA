@@ -94,12 +94,6 @@ module AllocatorController #(
         output reg  [17:0] ramb_b_data,
         output reg  [ 9:0] ramb_b_addr,
         
-        // UNIMPLEMENTED but we should raise ready and set data once the DSP
-        // is done with computation and we've run bias and relu
-        // see TODO #1
-        output reg         result_ready,
-        output reg  [17:0] result_data,
-
         input  wire        clk,
         input  wire        rst
     );
