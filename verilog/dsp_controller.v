@@ -31,7 +31,7 @@ module DspController(
         output reg  [12:0] filter_dsp_counter,
         input  wire [12:0] filter_length,
         
-        // Raw 48-bit result of the DSP
+        // Raw 48-bit result of the DSP, and whether it's ready to be read
         output wire [47:0] result,
         output reg         result_ready,
 
@@ -45,8 +45,11 @@ module DspController(
     reg [ 1:0] dsp_op;
     reg [ 1:0] dsp_op_next;
 
+    // The DSP takes some time to compute from when it inputs the last MAC for
+    // the round. When that happens, we trigger a counter that waits for some
+    // number of cycles before raising the "result_ready" signal.
     reg [2:0] pipeline_delay_result_counter;
-    localparam pipeline_delay_result = 5;
+    localparam pipeline_delay_result = 5; // How many cycles to wait for
     
     // Main operation of the DSP controller
     always @(posedge clk) begin
@@ -85,17 +88,25 @@ module DspController(
             dsp_op <= dsp_op_next;
         end
     end
-
+    
+    // Control the pipeline counter, which delays the "result_ready" signal
+    // from the time the last input is entered into the DSP pipeline.
     always @(posedge clk) begin
+        // Counter starts at 0, ready starts at 0
         if (rst) begin
             result_ready <= 0;
             pipeline_delay_result_counter <= 0;
+
+        // When we send the last computation to the DSP, start counting up
         end else if (filter_dsp_counter == filter_length) begin
+            // And if we hit the final value, raise "ready"
             if (pipeline_delay_result_counter == pipeline_delay_result) begin
                 result_ready <= 1;
             end else begin
                 pipeline_delay_result_counter <= pipeline_delay_result_counter + 1;
             end
+
+        // Otherwise, we don't need to do anything
         end
     end
     

@@ -49,18 +49,6 @@
  * and the seen behavior is that pixels in the higher row outside the
  * rightmost column are broadcast as well.
  * (Note that we do not need to support strides larger than the filter size).
- *
- * 3. (Shared with allocator) the proper position and filter data to be sent
- * to an allocator is available in the previous allocator. This may allow for
- * systolic computing, which would cut down on the connection requirements of
- * this module.
- *
- * 4. Allocators currently don't store their outputs anywhere. We may have to
- * find a way to propagate those values back up through this module.
- *
- * 5. We aren't currently dealing with filter weights at all. Do we want to do
- * this with another copy of the issue stage, or by doing both a filter issue
- * and an image issue in the same module?
  */
 
 module Issue #(
@@ -108,8 +96,13 @@ module Issue #(
         output wire [ 7:0] positioner_y,
         output wire [num_allocators-1:0] positioner_select,
         
+        // Controls the timing between issue rounds -- since we don't have
+        // enough DSPs to cover the entire image, we issue them in several
+        // "rounds". These signals allow the "accel" controller to trigger the
+        // next round after the previous has finished.
         input  wire        advance,
         output reg         round_done,
+
         // Done -- when all pixels in the image have been positioned,
         // broadcast through the full depth of the image, and output returned.
         output reg         done,
@@ -271,8 +264,8 @@ module Issue #(
             positioner_rst <= 1; // Turn off positioner
             done <= 1; // And signal that issue is done
         
-        // Or if broadcast has finished its processing for the round, move on
-        // to the next round
+        // When we get the signal to move on to the next round, start up the 
+        // positioner (which will also trigger broadcast)
         end else if (round_done && advance) begin
             positioner_advance <= 1;
 
@@ -280,13 +273,23 @@ module Issue #(
         end
     end
 
+    // We want round_done to preserve even if we're resetting the mechanics
+    // internally
     always @(posedge clk) begin
+        // On reset, start at 0
         if (rst) begin
             round_done <= 0;
+
+        // When we're finished broadcasting, the rest of issue is going to
+        // start resetting itself, but round_done should hold until the next
+        // time advance is raised
         end else if (broadcast_done) begin
             round_done <= 1;
+
+        // When we start the next round, go back to waiting for it to complete
         end else if (advance) begin
             round_done <= 0;
+
         end
     end
 

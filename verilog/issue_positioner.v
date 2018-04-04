@@ -1,5 +1,5 @@
-`ifndef _include_positioner
-`define _include_positioner
+`ifndef _include_issue_positioner
+`define _include_issue_positioner
 
 /*
  * Positioner Module
@@ -27,6 +27,9 @@
 /* TODO
  * 1. We can move positioning to a systolic computing model -- see
  * "systolics.txt". 
+ *
+ * 2. I ran a 5x5x3 image through "accel", and got a 4x4x3 output. I think
+ * this is a positioner error
  */
 
 module IssuePositioner #(
@@ -263,4 +266,4 @@ module IssuePositioner #(
         end
     end
 endmodule
-`endif // _include_positioner
+`endif // _include_issue_positioner
