@@ -1,5 +1,5 @@
-`ifndef _include_issue_filter_
-`define _include_issue_filter_
+`ifndef _include_filter_broadcast_
+`define _include_filter_broadcast_
 
 /* Issue Filter
  *
@@ -18,19 +18,19 @@
  * this module.
  */
 
-module IssueFilter #(
+module FilterBroadcast #(
         // We need this only to accept the filter_block signal. Maybe that can
         // be done by moving the OR reduction to "accel.v"?
         parameter num_allocators = 220
     ) (
         // For each output, we send the weight and a counter.
-        output reg  [12:0] filter_issue_counter,
-        output wire [17:0] filter_data,
+        output reg  [12:0] counter,
+        output wire [17:0] data,
 
         // We also allow the receivers to "block" us if they're out of space,
         // preventing further broadcast until block is lowered
-        output reg         filter_en,
-        input  wire [num_allocators-1:0] filter_block,
+        output reg         en,
+        input  wire [num_allocators-1:0] block,
 
         // How long is the filter? We need to know when to stop reading and
         // counting
@@ -51,43 +51,43 @@ module IssueFilter #(
     
     // Memory is delayed by one cycle, so we mostly operate on the next value
     // of the counter, instead of the present value
-    reg [12:0] filter_issue_counter_next;
+    reg [12:0] counter_next;
 
     // The address we want to read is represented by just the counter, nothing
     // fancy. We pad it out with three bits to fill up the 15 bit address.
-    assign filter_read_addr = {3'b0, filter_issue_counter_next};
+    assign filter_read_addr = {3'b0, counter_next};
 
     // If any allocators are blocking filter, we should hold
-    assign filter_blocked = |filter_block;
+    assign blocked = |block;
 
     // Our output is just the value from memory, but we want that to be fast
-    assign filter_data = filter_read_data;
+    assign data = filter_read_data;
 
     // Main controls for this module
     always @(posedge clk) begin
         // Initial: counter is zero, no data ready, not done
         if (rst) begin
-            filter_issue_counter_next <= 0;
-            filter_en <= 0;
+            counter_next <= 0;
+            en <= 0;
             done <= 0;
         
         // If we've sent everything, do nothing
         end else if (done) begin
 
         // When we reach the end of the count, we have nothing left to send
-        end else if (filter_issue_counter_next == filter_length) begin
-            filter_en <= 0;
+        end else if (counter_next == filter_length) begin
+            en <= 0;
             done <= 1;
 
         // If a DSP is blocking, don't move, but we should show that there's
         // no new data coming out
-        end else if (filter_blocked) begin
-            filter_en <= 0;
+        end else if (blocked) begin
+            en <= 0;
 
         // Otherwise, count up and send data
         end else begin
-            filter_en <= 1;
-            filter_issue_counter_next <= filter_issue_counter_next + 1;
+            en <= 1;
+            counter_next <= counter_next + 1;
 
         end
     end
@@ -96,13 +96,13 @@ module IssueFilter #(
     // (which usually means next-1, but not always)
     always @(posedge clk) begin
         if (rst) begin
-            filter_issue_counter <= 0;
+            counter <= 0;
 
         end else begin
-            filter_issue_counter <= filter_issue_counter_next;
+            counter <= counter_next;
 
         end
     end
 
 endmodule
-`endif // _include_issue_filter_
+`endif // _include_filter_broadcast_

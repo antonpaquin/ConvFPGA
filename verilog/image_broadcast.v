@@ -1,8 +1,8 @@
-`ifndef _include_issue_broadcast_
-`define _include_issue_broadcast_
+`ifndef _include_image_broadcast_
+`define _include_image_broadcast_
 
 /*
- * Issue Broadcast
+ * Image Broadcast
  *
  * Given some bounds and memory access, this module will:
  *     - Compute what pixels need to be sent
@@ -46,7 +46,7 @@
  * incrementing the address by the proper amount along with next_x, next_y,
  * and next_z as they are updated.
  */
-module IssueBroadcast(
+module ImageBroadcast(
         // Memory signals -- we need read access to image memory
         output wire [15:0] ramb_read_addr,
         input  wire [17:0] ramb_read_data,
@@ -70,8 +70,8 @@ module IssueBroadcast(
         input  wire [ 8:0] z_max,
 
         // Whether we should continue to send values, or to wait
-        input  wire        issue_block,
-        output reg         issue_en,
+        input  wire        block,
+        output reg         en,
         
         // This data represents the currently issued pixel. The allocators
         // will read this to pick up their pixel data as the allocator sweeps
@@ -80,8 +80,8 @@ module IssueBroadcast(
         output reg  [ 7:0] current_y,
         output wire [17:0] current_data,
         
-        // When all pixels for this round have been sent, raise "done"
-        output reg         done,
+        // When all pixels for this round have been sent, raise "round"
+        output reg         round,
 
         input  wire        clk,
         input  wire        rst
@@ -127,13 +127,13 @@ module IssueBroadcast(
 
     // Done detection
     always @(posedge clk) begin
-        // Start off done is 0
+        // Start off round is 0
         if (rst) begin
-            done <= 1'b0;
+            round <= 1'b0;
 
-        // When we hit the last XYZ, set done 1
+        // When we hit the last XYZ, set round 1
         end else if (next_x == x_end && next_y == y_max && next_z == z_max) begin
-            done <= 1'b1;
+            round <= 1'b1;
 
         // Else hold state
         end 
@@ -153,7 +153,7 @@ module IssueBroadcast(
         // if we're not reset, calculate the next value
         end else begin
             // If we're blocked, don't move
-            if (issue_block) begin
+            if (block) begin
             
             // If it's a rectangle placement, follow the rectangle rules
             end else if (x_rectangle) begin
@@ -243,17 +243,17 @@ module IssueBroadcast(
     // that Z will be issued in-order.
     always @(posedge clk) begin
         // Start off sending nothing
-        if (rst || done) begin
+        if (rst || round) begin
             current_x <= x_start;
             current_x <= y_min;
-            issue_en <= 1'b0;
+            en <= 1'b0;
         
         // Otherwise, current XY are the values of XY that are coming out of
         // memory right now
         end else begin
             current_x <= next_x;
             current_y <= next_y;
-            issue_en <= ~issue_block;
+            en <= ~block;
         end
     end
     
@@ -274,4 +274,4 @@ module IssueBroadcast(
     end
 
 endmodule
-`endif // _include_issue_broadcast_
+`endif // _include_image_broadcast_

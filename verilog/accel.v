@@ -1,8 +1,10 @@
 `ifndef _include_accel_
 `define _include_accel_
 
-`include "issue.v"
-`include "issue_filter.v"
+`include "scheduler.v"
+`include "image_broadcast.v"
+`include "filter_broadcast.v"
+`include "positioner.v"
 `include "allocator.v"
 `include "memory.v"
 
@@ -44,11 +46,56 @@ module Accel(
         input  wire [17:0] filter_bias,
     
         // Done signal for when this (image, filter) pair has been completed
-        output wire        done,
+        output wire        accel_done,
 
         input  wire        clk,
         input  wire        rst
     );
+
+    // Reset control for the positioner. Positioner should start off, turn on
+    // when we begin working on an (image, filter) pair, walk through one or
+    // more rounds of positioning, and turn off after
+    wire image_broadcast_round;
+    wire image_broadcast_rst;
+
+    wire filter_broadcast_done;
+    wire filter_broadcast_rst;
+
+    wire positioner_round;
+    wire positioner_advance;
+    wire positioner_done;
+    wire positioner_rst;
+
+    wire allocator_done;
+    wire allocator_rst;
+
+    wire [17:0] image_broadcast_data;
+    wire [ 7:0] image_broadcast_x;
+    wire [ 7:0] image_broadcast_y;
+    wire        image_broadcast_block;
+    wire        image_broadcast_en;
+
+    // filter data out of filter issue
+    wire [12:0] filter_broadcast_counter;
+    wire [17:0] filter_broadcast_data;
+    wire        filter_broadcast_block;
+    wire        filter_broadcast_en;
+
+    wire [7:0] positioner_x;
+    wire [7:0] positioner_y;
+    wire       positioner_sel;
+
+    // The positioner computes where it has placed DSPs this round, and stores
+    // that information in these signals. These are then sent to issue to
+    // determine which pixels need to be sent.
+    wire [7:0] field_x_min,
+               field_x_max,
+               field_x_start,
+               field_x_end,
+               field_y_min,
+               field_y_max;
+
+    wire [17:0] allocator_data;
 
     // I'm naming this "virtual" and "physical", though that isn't perfectly
     // accurate. The issue stages assume that their data starts at address 0,
@@ -67,114 +114,122 @@ module Accel(
 
     assign fmem_read_addr_phys = fmem_read_addr_virt + filter_memory_offset;
 
-    // Connections regarding image data out of image issue
-    wire [ 7:0] issue_x;
-    wire [ 7:0] issue_y;
-    wire [17:0] issue_data;
-    wire        issue_en;
-    wire        issue_block;
-    wire        issue_done;
-    reg         issue_advance;
-    
-    // Positioner data out of image issue
-    // As in above TODO, this could be broken out into a separate top-level
-    // module
-    wire [7:0] positioner_x;
-    wire [7:0] positioner_y;
-    wire       positioner_sel;
+    Scheduler scheduler (
+        .positioner_round(positioner_round),
+        .positioner_advance(positioner_advance),
+        .positioner_done(positioner_done),
+        .positioner_rst(positioner_rst),
 
-    // filter data out of filter issue
-    wire [12:0] filter_issue_counter;
-    wire [17:0] filter_data;
-    wire        filter_block;
-    wire        filter_en;
-    wire        filter_done;
+        .image_broadcast_round(image_broadcast_round),
+        .image_broadcast_rst(image_broadcast_rst),
 
-    // round_done marks the distinction between issue rounds, and when it goes
-    // high round_data will have the output of the DSP
-    // Ideally, round_done is an OR reduction on all of the DSP's
-    // "result_ready" signals
-    wire        round_done;
-    wire [17:0] round_data;
+        .filter_broadcast_done(filter_broadcast_done),
+        .filter_broadcast_rst(filter_broadcast_rst),
 
-    // Global allocator reset signal (for now, "global" means one)
-    // Between issue rounds, all allocators need a cycle of reset
-    reg  allocator_rst;
-    
-    // When both image issue and filter issue have sent all the data, we're
-    // done with computation
-    // TODO this is almost correct, but a bit premature -- we should check
-    // that all the DSPs have finished computation and output as well
-    assign done = issue_done && filter_done;
+        .allocator_done(allocator_done),
+        .allocator_rst(allocator_rst),
 
-    // The issue stage, which picks out what values from image memory need to
-    // be sent to the DSPs, and sends them to all the DSPs
-    Issue #(
-        .num_allocators(1)
-    ) issue (
-        .imem_read_addr(imem_read_addr_virt),
-        .imem_read_data(imem_read_data),
-
-        .image_dim(image_dim),
-        .image_depth(image_depth),
-
-        .filter_halfsize(filter_halfsize),
-        .filter_stride(filter_stride),
-
-        .issue_x(issue_x),
-        .issue_y(issue_y),
-        .issue_data(issue_data),
-        .issue_en(issue_en), 
-
-        .issue_block(issue_block),
-
-        .positioner_x(positioner_x),
-        .positioner_y(positioner_y),
-        .positioner_select(positioner_sel),
+        .accel_done(accel_done),
         
-        .advance(issue_advance),
-        .done(issue_done),
-        
+        .advance(1'b1),
+
         .clk(clk),
         .rst(rst)
     );
-    
+
+    // The issue stage, which picks out what values from image memory need to
+    // be sent to the DSPs, and sends them to all the DSPs
+    ImageBroadcast image_broadcast (
+        .ramb_read_addr(imem_read_addr_virt),
+        .ramb_read_data(imem_read_data),
+
+        .image_dim(image_dim),
+        .image_padding(filter_halfsize),
+
+        .x_min(field_x_min),
+        .x_max(field_x_max),
+        .x_start(field_x_start),
+        .x_end(field_x_end),
+        .y_min(field_y_min),
+        .y_max(field_y_max),
+        .z_max((image_depth-1)),
+
+        .block(image_broadcast_block),
+        .en(image_broadcast_en),
+
+        .current_x(image_broadcast_x),
+        .current_y(image_broadcast_y),
+        .current_data(image_broadcast_data),
+
+        .round(image_broadcast_round),
+
+        .clk(clk),
+        .rst(rst | image_broadcast_rst)
+    );
+
     // The filter issue stage, which sends a sequence of filter data to the
     // DSPs, fairly simply. If we move to a systolic array, this only needs to
     // be connected to the first DSP.
-    IssueFilter #(
+    FilterBroadcast #(
         .num_allocators(1)
-    ) issue_filter (
-        .filter_issue_counter(filter_issue_counter),
-        .filter_data(filter_data),
-        .filter_en(filter_en),
-        .filter_block(filter_block),
+    ) filter_broadcast (
+        .counter(filter_broadcast_counter),
+        .data(filter_broadcast_data),
+        .en(filter_broadcast_en),
+        .block(filter_broadcast_block),
         
         .filter_length(filter_length),
 
         .filter_read_addr(fmem_read_addr_virt),
         .filter_read_data(fmem_read_data),
 
-        .done(filter_done),
+        .done(filter_broadcast_done),
 
         .clk(clk),
-        .rst(rst)
+        .rst(rst | filter_broadcast_rst)
     );
+
+    Positioner #(
+        .num_allocators(1)
+    ) positioner (
+        .image_dim(image_dim),
+        .padding(filter_halfsize),
+        .stride(filter_stride),
+
+        .center_x(positioner_x),
+        .center_y(positioner_y),
+        .allocator_select(positioner_sel),
+
+        .x_min(field_x_min),
+        .x_max(field_x_max),
+        .x_start(field_x_start),
+        .x_end(field_x_end),
+        .y_min(field_y_min),
+        .y_max(field_y_max),
+
+        .advance(positioner_advance),
+        .round(positioner_round),
+        .done(positioner_done),
+
+        .clk(clk),
+        .rst(rst | positioner_rst)
+    );
+    
     
     // The allocator stage, which controls a single DSP. When we eventually
     // move to more DSP units, we'll need to set up a "generate" loop here to
     // place a bunch of them down
     Allocator allocator (
-        .issue_a_x(issue_x),
-        .issue_a_y(issue_y),
-        .issue_a_data(issue_data),
-        .issue_a_blocked(~issue_en),
-        .issue_a_block(issue_block),
+        .image_a_x(image_broadcast_x),
+        .image_a_y(image_broadcast_y),
+        .image_a_data(image_broadcast_data),
+        .image_a_blocked(~image_broadcast_en),
+        .image_a_block(image_broadcast_block),
 
-        .filter_issue_counter(filter_issue_counter),
-        .filter_data(filter_data),
-        .filter_blocked(~filter_en),
-        .filter_block(filter_block),
+        .filter_counter(filter_broadcast_counter),
+        .filter_data(filter_broadcast_data),
+        .filter_blocked(~filter_broadcast_en),
+        .filter_block(filter_broadcast_block),
 
         .center_x_input(positioner_x),
         .center_y_input(positioner_y),
@@ -184,12 +239,17 @@ module Accel(
         .filter_bias(filter_bias),
         .filter_length(filter_length),
 
-        .result_ready(round_done),
-        .result_data(round_data),
+        .done(allocator_done),
+        .result_data(allocator_data),
 
         .clk(clk),
-        .rst(allocator_rst | rst)
+        .rst(rst | allocator_rst)
     );
+    
+    // Debug / this is a hack
+    always @(posedge allocator_done) begin
+        $display("DSP emits: %d", allocator_data);
+    end
     
     // Simple memory unit. We'll probably expose the write lines to the
     // interface module.
@@ -213,48 +273,6 @@ module Accel(
         .clk(clk)
     );
     
-    // Control the issue_advance signal, which tells "issue" when it can move
-    // on to positioning and broadcasting the next round of data. We want to
-    // raise this for one cycle as soon as we've read everything that the DSPs
-    // have output. The allocators each put this out on their "result_ready"
-    // signal, which we have mapped to "round_done".
-    always @(posedge clk) begin
-        // Start out high (this doesn't really matter)
-        if (rst) begin
-            issue_advance <= 1;
-        
-        // Auto toggle off after one cycle
-        end else if (issue_advance) begin
-            issue_advance <= 0;
-        
-        // When the allocators have finished this round, we can tell issue to
-        // start up the next round
-        end else if (round_done) begin
-            issue_advance <= 1;
-        end
-    end
-
-    // Control the allocator reset signal. We want to raise this when a round
-    // has finished.
-    always @(posedge clk) begin
-        // Initial: start at 0
-        if (rst) begin
-            allocator_rst <= 0;
-
-        // When the allocator finishes, reset the allocator (and emit an
-        // output for debug purposes)
-        end else if (round_done) begin
-            allocator_rst <= 1;
-            if (!allocator_rst) begin
-                $display("DSP emits: %d", round_data);
-            end
-
-        // Otherwise, we don't need to reset the allocator
-        end else begin
-            allocator_rst <= 0;
-
-        end
-    end
 
 endmodule
 

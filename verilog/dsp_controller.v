@@ -49,7 +49,7 @@ module DspController(
     // the round. When that happens, we trigger a counter that waits for some
     // number of cycles before raising the "result_ready" signal.
     reg [2:0] pipeline_delay_result_counter;
-    localparam pipeline_delay_result = 5; // How many cycles to wait for
+    localparam pipeline_delay_result = 2; // How many cycles to wait for
     
     // Main operation of the DSP controller
     always @(posedge clk) begin
@@ -99,12 +99,11 @@ module DspController(
 
         // When we send the last computation to the DSP, start counting up
         end else if (filter_dsp_counter == filter_length) begin
+            pipeline_delay_result_counter <= pipeline_delay_result_counter + 1;
             // And if we hit the final value, raise "ready"
             if (pipeline_delay_result_counter == pipeline_delay_result) begin
                 result_ready <= 1;
-            end else begin
-                pipeline_delay_result_counter <= pipeline_delay_result_counter + 1;
-            end
+            end 
 
         // Otherwise, we don't need to do anything
         end

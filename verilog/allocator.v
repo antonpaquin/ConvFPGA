@@ -39,14 +39,14 @@
 
 module Allocator(
         // Input values coming from the issue stage that describe image data
-        input  wire [ 7:0] issue_a_x,
-        input  wire [ 7:0] issue_a_y,
-        input  wire [17:0] issue_a_data,
-        input  wire        issue_a_blocked,
-        output wire        issue_a_block,
+        input  wire [ 7:0] image_a_x,
+        input  wire [ 7:0] image_a_y,
+        input  wire [17:0] image_a_data,
+        input  wire        image_a_blocked,
+        output wire        image_a_block,
         
         // Input values for the filter weights, coming from (???)
-        input  wire [12:0] filter_issue_counter,
+        input  wire [12:0] filter_counter,
         input  wire [17:0] filter_data,
         input  wire        filter_blocked,
         output wire        filter_block,
@@ -66,7 +66,7 @@ module Allocator(
         input  wire [12:0] filter_length,
         
         // Output, and whether the output is ready to be read
-        output wire        result_ready,
+        output wire        done,
         output wire [17:0] result_data,
 
         input  wire        clk,
@@ -107,17 +107,17 @@ module Allocator(
     AllocatorController controller (
         // Data from issue broadcast -- what information from the image is
         // being sent right now?
-        .issue_a_x(issue_a_x),
-        .issue_a_y(issue_a_y),
-        .issue_a_data(issue_a_data),
-        .issue_a_blocked(issue_a_blocked),
+        .issue_a_x(image_a_x),
+        .issue_a_y(image_a_y),
+        .issue_a_data(image_a_data),
+        .issue_a_blocked(image_a_blocked),
         
         // Synchronizing counters for how much of the issue data has been
         // received vs how much has the DSP been able to process
         .issue_a_alloc_counter(issue_a_alloc_counter),
         .issue_a_dsp_counter(issue_a_dsp_counter),
         // Given the state of these counters, should we block issue?
-        .issue_a_block(issue_a_block),
+        .issue_a_block(image_a_block),
 
         // Filter data needs to come in from somewhere as well. Should be
         // issued in-order like image data, so we don't actually need the XYZ
@@ -127,7 +127,7 @@ module Allocator(
         
         // Filter synchronizing counters, to keep the DSP and the controller
         // within the bounds set by the RAMB18 buffer
-        .filter_issue_counter(filter_issue_counter),
+        .filter_issue_counter(filter_counter),
         .filter_dsp_counter(filter_dsp_counter),
         .filter_block(filter_block),
         
@@ -175,13 +175,13 @@ module Allocator(
         .issue_a_dsp_counter(issue_a_dsp_counter),
 
         // And these synchronize filter data
-        .filter_issue_counter(filter_issue_counter),
+        .filter_issue_counter(filter_counter),
         .filter_dsp_counter(filter_dsp_counter),
         .filter_length(filter_length),
         
         // Result of the DSP48 -- "P" -- as a 48 bit number
         .result(result),
-        .result_ready(result_ready),
+        .result_ready(done),
 
         .clk(clk),
         .rst(rst)

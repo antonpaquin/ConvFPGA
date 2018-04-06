@@ -1,5 +1,5 @@
-`ifndef _include_issue_positioner
-`define _include_issue_positioner
+`ifndef _include_positioner_
+`define _include_positioner_
 
 /*
  * Positioner Module
@@ -32,7 +32,7 @@
  * this is a positioner error
  */
 
-module IssuePositioner #(
+module Positioner #(
         // Parameterized number of DSPs we have available to assign
         parameter num_allocators = 220
     ) (
@@ -64,6 +64,7 @@ module IssuePositioner #(
         // happen for each round, so we wait until the "advance" signal is
         // raised before positioning the next round.
         input  wire        advance,
+        output reg         round,
 
         // When we've placed the last pixel in a layer, we raise "done" to
         // show that we can move on to the next filter.
@@ -140,6 +141,19 @@ module IssuePositioner #(
         end
     end
 
+    always @(posedge clk) begin
+        if (rst) begin
+            round <= 0;
+
+        end else if (advance) begin
+            round <= 0;
+
+        end else if (allocator_counter == num_allocators) begin
+            round <= 1;
+
+        end 
+    end
+
     // Now we're going to start calculating where to actually put the DSPs.
     // For this, we need to know where the next position is. 
     // These signals are a simple (current position + stride), the usefulness
@@ -154,12 +168,12 @@ module IssuePositioner #(
     assign next_x = (
         // If the next step would be out of bounds in both x and y, just stay
         // steady; we're done.
-        (advance_x >= position_bound && advance_y >= position_bound) ? 
+        (advance_x > position_bound && advance_y > position_bound) ? 
             center_x 
 
         // Otherwise if the next position would be out of bounds in x, go back
         // to the start of x
-        : (advance_x >= position_bound) ?
+        : (advance_x > position_bound) ?
             padding
 
         // Otherwise, just increment x by stride
@@ -172,7 +186,7 @@ module IssuePositioner #(
     assign next_y = (
         // If X is ready to wrap around, and Y would not advance out of
         // bounds, then increment Y by stride
-        (advance_x >= position_bound && advance_y < position_bound) ?
+        (advance_x > position_bound && advance_y <= position_bound) ?
             advance_y
 
         // Otherwise, keep Y the same
@@ -187,7 +201,7 @@ module IssuePositioner #(
 
         // If we're assigning something and the next X and Y would be out of
         // bounds, we're done; set the done signal
-        end else if ((allocator_select != 0) && (advance_x >= position_bound) && (advance_y >= position_bound)) begin
+        end else if ((allocator_select != 0) && (advance_x > position_bound) && (advance_y > position_bound)) begin
             done <= 1;
 
         // Otherwise, hold state
@@ -215,7 +229,7 @@ module IssuePositioner #(
                 // first position that needs to be broadcast is described here.
                 x_start <= center_x - padding; 
                 y_min <= center_y - padding;
-            end
+            end 
 
         // If we're counting up,
         end else if (allocator_counter <= num_allocators) begin
@@ -266,4 +280,4 @@ module IssuePositioner #(
         end
     end
 endmodule
-`endif // _include_issue_positioner
+`endif // _include_positioner_

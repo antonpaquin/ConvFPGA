@@ -41,7 +41,7 @@ module main();
         // This currently isn't hooked up anywhere (bad?)
         .filter_bias(18'd100),
         
-        .done(done),
+        .accel_done(done),
 
         .clk(clk),
         .rst(rst)

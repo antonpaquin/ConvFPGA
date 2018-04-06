@@ -28,6 +28,14 @@ center positioning
         we give the positioning a few cycles head start)
 
 
+allocator writeback
+    If we give the allocators a bus to write back data after they finish 
+        processing, they could control the write lock of that bus via a 
+        systolically distributed bit and tri's
+    We could also distribute the data back systolically but that would be tough
+        to implement.
+
+
 image data is not a target --
     1. With linear positioning, it would be too complex (for now) to share data
         vertically
