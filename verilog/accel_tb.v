@@ -25,6 +25,8 @@ module main();
         .image_memory_offset(16'd0),
         // Filter memory is stored at index 1000
         .filter_memory_offset(16'd1000),
+        // Output at 1100
+        .output_memory_offset(16'd1100),
         // This is completely arbitrary
         
         .filter_halfsize(2'd1), // 3x3 filter

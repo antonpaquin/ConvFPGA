@@ -6,7 +6,9 @@
 `include "filter_broadcast.v"
 `include "positioner.v"
 `include "allocator.v"
+`include "writeback.v"
 `include "memory.v"
+
 
 /* 
  * accel.v
@@ -37,6 +39,7 @@ module Accel(
         // they are contiguous. We just need to know where each starts.
         input  wire [15:0] image_memory_offset,
         input  wire [15:0] filter_memory_offset,
+        input  wire [15:0] output_memory_offset,
         
         // Constant information about the filter, which will be distributed
         // throughout the chip.
@@ -68,6 +71,9 @@ module Accel(
 
     wire allocator_done;
     wire allocator_rst;
+    
+    wire writeback_en;
+    wire writeback_rst;
 
     wire [17:0] image_broadcast_data;
     wire [ 7:0] image_broadcast_x;
@@ -114,6 +120,14 @@ module Accel(
 
     assign fmem_read_addr_phys = fmem_read_addr_virt + filter_memory_offset;
 
+    // as above, for output
+    wire [15:0] omem_write_addr_virt;
+    wire [15:0] omem_write_addr_phys;
+    wire [17:0] omem_write_data;
+    wire        omem_write_en;
+
+    assign omem_write_addr_phys = omem_write_addr_virt + output_memory_offset;
+
     Scheduler scheduler (
         .positioner_round(positioner_round),
         .positioner_advance(positioner_advance),
@@ -128,11 +142,16 @@ module Accel(
 
         .allocator_done(allocator_done),
         .allocator_rst(allocator_rst),
+        
+        // TODO writeback_en is a hack that only works because we're running
+        // a single allocator. Remove and implement properly by sourcing it
+        // from the allocators (requires additions to allocator.v) when we
+        // move out of single DSP testing
+        .writeback_en(writeback_en),
+        .writeback_rst(writeback_rst),
 
         .accel_done(accel_done),
         
-        .advance(1'b1),
-
         .clk(clk),
         .rst(rst)
     );
@@ -245,11 +264,18 @@ module Accel(
         .clk(clk),
         .rst(rst | allocator_rst)
     );
-    
-    // Debug / this is a hack
-    always @(posedge allocator_done) begin
-        $display("DSP emits: %d", allocator_data);
-    end
+
+    Writeback writeback (
+        .data(allocator_data),
+        .en(writeback_en),
+
+        .out_mem_data(omem_write_data),
+        .out_mem_addr(omem_write_addr_virt),
+        .out_mem_en(omem_write_en),
+
+        .clk(clk),
+        .rst(rst | writeback_rst)
+    );
     
     // Simple memory unit. We'll probably expose the write lines to the
     // interface module.
@@ -262,9 +288,9 @@ module Accel(
         .read_addr_b(fmem_read_addr_phys),
         .read_data_b(fmem_read_data),
 
-        //.write_addr_a(),
-        //.write_data_a(),
-        //.write_en_a(),
+        .write_addr_a(omem_write_addr_phys),
+        .write_data_a(omem_write_data),
+        .write_en_a(omem_write_en),
 
         //.write_addr_b(),
         //.write_data_b(),

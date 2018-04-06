@@ -4,7 +4,7 @@
 `define STATE_START_ROUND          3'b000
 `define STATE_POSITIONER_HEADSTART 3'b001
 `define STATE_BROADCASTING         3'b010
-`define STATE_AWAIT_ADVANCE        3'b011
+`define STATE_END_ROUND            3'b011
 `define STATE_DONE                 3'b100
 
 module Scheduler (
@@ -22,9 +22,10 @@ module Scheduler (
         input  wire allocator_done,
         output reg  allocator_rst,
 
-        output reg  accel_done,
+        output reg  writeback_en,
+        output reg  writeback_rst,
 
-        input  wire advance,
+        output reg  accel_done,
 
         input  wire clk,
         input  wire rst
@@ -52,16 +53,14 @@ module Scheduler (
             end
 
         end else if (state == `STATE_BROADCASTING) begin
-            if (image_broadcast_round && positioner_done && allocator_done) begin
-                state <= `STATE_DONE;
-
-            end else if (image_broadcast_round && positioner_round && allocator_done) begin
-                state <= `STATE_AWAIT_ADVANCE;
-
+            if (image_broadcast_round && (positioner_round || positioner_round) && allocator_done) begin
+                state <= `STATE_END_ROUND;
             end
 
-        end else if (state == `STATE_AWAIT_ADVANCE) begin
-            if (advance) begin
+        end else if (state == `STATE_END_ROUND) begin
+            if (positioner_done) begin
+                state <= `STATE_DONE;
+            end else begin
                 state <= `STATE_START_ROUND;
             end
 
@@ -79,6 +78,8 @@ module Scheduler (
                 filter_broadcast_rst = 1;
                 allocator_rst = 1;
                 accel_done = 0;
+                writeback_en = 0;
+                writeback_rst = 0;
             end
 
             `STATE_POSITIONER_HEADSTART: begin
@@ -88,6 +89,8 @@ module Scheduler (
                 filter_broadcast_rst = 0;
                 allocator_rst = 0;
                 accel_done = 0;
+                writeback_en = 0;
+                writeback_rst = 0;
             end
 
             `STATE_BROADCASTING: begin
@@ -97,15 +100,19 @@ module Scheduler (
                 filter_broadcast_rst = 0;
                 allocator_rst = 0;
                 accel_done = 0;
+                writeback_en = 0;
+                writeback_rst = 0;
             end
 
-            `STATE_AWAIT_ADVANCE: begin
+            `STATE_END_ROUND: begin
                 positioner_advance = 0;
                 positioner_rst = 0;
                 image_broadcast_rst = 1;
                 filter_broadcast_rst = 1;
                 allocator_rst = 0;
                 accel_done = 0;
+                writeback_en = 1;
+                writeback_rst = 0;
             end
 
             `STATE_DONE: begin
@@ -115,6 +122,8 @@ module Scheduler (
                 filter_broadcast_rst = 1;
                 allocator_rst = 1;
                 accel_done = 1;
+                writeback_en = 0;
+                writeback_rst = 1;
             end
 
             default: begin
@@ -124,6 +133,8 @@ module Scheduler (
                 filter_broadcast_rst = 1;
                 allocator_rst = 1;
                 accel_done = 0;
+                writeback_en = 0;
+                writeback_rst = 1;
             end
         endcase
     end
