@@ -45,7 +45,7 @@ module Interface(
     );
 
     wire master_clk;
-    assign master_clk = master_bus[23];
+    assign master_clk = clk; // The emulator should handle this
 
     wire [4:0] master_meta;
     assign master_meta = master_bus[22:18];
