@@ -47,6 +47,10 @@ module Accel(
         input  wire [ 2:0] filter_stride,
         input  wire [12:0] filter_length,
         input  wire [17:0] filter_bias,
+
+        input  wire [15:0] interface_write_addr,
+        input  wire [17:0] interface_write_data,
+        input  wire        interface_write_en,
     
         // Done signal for when this (image, filter) pair has been completed
         output wire        accel_done,
@@ -292,9 +296,9 @@ module Accel(
         .write_data_a(omem_write_data),
         .write_en_a(omem_write_en),
 
-        //.write_addr_b(),
-        //.write_data_b(),
-        //.write_en_b(),
+        .write_addr_b(interface_write_addr),
+        .write_data_b(interface_write_data),
+        .write_en_b(interface_write_en),
 
         .clk(clk)
     );
