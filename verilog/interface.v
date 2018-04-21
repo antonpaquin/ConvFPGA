@@ -69,7 +69,6 @@ module Interface(
             filter_bias <= 0;
             mem_write_data <= 0;
             mem_write_addr <= 0;
-            mem_write_en <= 0;
         end
 
         else if (master_meta == `PROTOCOL_NOOP) begin
@@ -109,7 +108,6 @@ module Interface(
             // the memory writes will be all weird
             // we'll need synchronization
             mem_write_addr <= mem_write_addr + 1;
-            mem_write_en <= 1;
             mem_write_data <= master_data;
         end
 
@@ -119,32 +117,17 @@ module Interface(
         else if (master_meta == `PROTOCOL_OUTPUT_ACK) begin
             // TODO
         end
-    end
 
-    always @(posedge master_clk) begin
-        if (rst) begin
-            master_run_req <= 0;
-
-        end else if (master_meta == `PROTOCOL_RUN_ACCEL) begin
-            master_run_req <= 1;
-
-        end else if (slave_run_ack) begin
-            master_run_req <= 0;
+        if (!rst && (master_meta == `PROTOCOL_DATA)) begin
+            mem_write_en <= 1;
+        end else begin
+            mem_write_en <= 0;
         end
-    end
 
-    always @(posedge clk) begin
-        if (rst) begin
-            trigger_accel <= 0;
-            slave_run_ack <= 0;
-        end else if (master_run_req && !slave_run_ack) begin
+        if (!rst && (master_meta == `PROTOCOL_RUN_ACCEL)) begin
             trigger_accel <= 1;
-            slave_run_ack <= 1;
         end else begin
             trigger_accel <= 0;
-            if (!master_run_req) begin
-                slave_run_ack <= master_run_req;
-            end
         end
     end
 

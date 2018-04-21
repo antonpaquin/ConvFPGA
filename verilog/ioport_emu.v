@@ -21,19 +21,22 @@ module IoPortEmu #(
     endgenerate
 
     initial begin
-        port_file = $fopen("~/tmp/verilog.port", "r");
+        port_file = $fopen("/home/anton/tmp/verilog.port", "r");
     end
 
     initial begin
         ii = 0;
         forever begin
-            #2;
+            #5;
             test_char = $fgetc(port_file);
-            while (test_char != {9{1'b1}}) begin
+            while (test_char != {9{1'b1}} && ii < width_bytes) begin
                 readbuf[ii] = test_char[7:0];
-                ii = (ii + 1) % width_bytes;
-                test_char = $fgetc(port_file);
+                ii = ii + 1;
+                if (ii < width_bytes) begin
+                    test_char = $fgetc(port_file);
+                end 
             end
+            ii = ii % width_bytes;
         end
     end
 

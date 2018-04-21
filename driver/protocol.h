@@ -1,3 +1,6 @@
+#ifndef _include_protocol_h_
+#define _include_protocol_h_
+
 void proto_open(void);
 void proto_close(void);
 
@@ -11,3 +14,4 @@ void proto_data(int data);
 void proto_run_accel(void);
 void proto_output_ack(void);
 
+#endif // _include_protocol_h_

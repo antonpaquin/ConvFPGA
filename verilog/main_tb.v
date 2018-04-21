@@ -40,6 +40,11 @@ module main (
     end
 
     initial begin
+        $dumpfile("main.vcd");
+        $dumpvars(0, uut, port);
+    end
+
+    initial begin
         rst = 1;
         #10 rst = 0;
     end

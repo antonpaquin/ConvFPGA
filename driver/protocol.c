@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #include "ioport_comm.h"
 
 #define PROTOCOL_NOOP         ( 0<<18)
@@ -14,25 +16,24 @@
 
 #define MASK_CLK  (0x00800000)
 #define MASK_CMD  (0x007C0000)
-#define MASK_DATA (0x00003FFF)
+#define MASK_DATA (0x0003FFFF)
 
 void write_word(int cmd, int data) {
     int msg;
     char buf[3];
-
     msg = MASK_CLK | (MASK_CMD & cmd) | (MASK_DATA & data);
-    buf[0] = msg & 0x000000FF;
+    buf[2] = msg & 0x000000FF;
     buf[1] = (msg & 0x0000FF00) >> 8;
-    buf[2] = (msg & 0x00FF0000) >> 16;
+    buf[0] = (msg & 0x00FF0000) >> 16;
     ioport_write(buf, 3);
-    buf[2] &= ~MASK_CLK;
+    buf[0] &= (~MASK_CLK >> 16);
     // I might need to sleep here
     ioport_write(buf, 3);
     // I might need to sleep here
 }
 
 void proto_open(void) {
-    ioport_open("~/tmp/verilog.port");
+    ioport_open("/home/anton/tmp/verilog.port");
 }
 void proto_close(void) {
     ioport_close();
@@ -55,7 +56,7 @@ void proto_filter_info(int halfsize, int stride, int length) {
     static const int mask_stride =   0x0000E000;
     static const int mask_length =   0x000001FF;
     int data;
-
+    
     data = ((halfsize << 16) & mask_halfsize) | ((stride << 13) & mask_stride) | (length & mask_length);
     write_word(PROTOCOL_FILTER_INFO, data);
 }
