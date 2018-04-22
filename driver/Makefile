@@ -1,2 +1,9 @@
-driver: filter.c filter.h image.c image.h ioport_comm.c ioport_comm.h protocol.c protocol.h driver.c
-	gcc -o driver driver.c image.c filter.c ioport_comm.c protocol.c -g
+SRCS=driver.c filter.c image.c ioport_comm.c protocol.c
+OBJS=$(SRCS:.c=.o)
+HEAD=$(SRCS:.c=.h)
+
+all: $(OBJS)
+	gcc -o test test.c $(OBJS)
+
+.c.o: 
+	gcc -c -o $@ $<
