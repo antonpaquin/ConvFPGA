@@ -3,6 +3,10 @@
 
 #define max(x, y) ((x > y) ? x : y)
 
+inline int image_pick_index(int *start, int row_size, int layer_size, int z, int y, int x) {
+    return *(start + (layer_size * z) + (row_size * y) + x);
+}
+
 struct image_struct *iprocess_maxpool(struct image_struct *s) {
     int layer_ctr, col_ctr, row_ctr;
     int c[4];
@@ -25,20 +29,20 @@ struct image_struct *iprocess_maxpool(struct image_struct *s) {
         for (col_ctr = 0; col_ctr < row_size; col_ctr += 2) {
             for (row_ctr = 0; row_ctr < row_size; row_ctr += 2) {
                 if (col_ctr + 1 == row_size && row_ctr + 1 == row_size) {
-                    *data_out++ = *(data_in + (layer_ctr * layer_size) + (col_ctr * row_size) + row_ctr);
+                    *data_out++ = image_pick_index(data_in, row_size, layer_size, layer_ctr, col_ctr, row_ctr);
                 } else if (col_ctr + 1 == row_size) {
-                    c[0] = *(data_in + (layer_ctr * layer_size) + (col_ctr * row_size) + row_ctr);
-                    c[1] = *(data_in + (layer_ctr * layer_size) + (col_ctr * row_size) + row_ctr + 1);
+                    c[0] = image_pick_index(data_in, row_size, layer_size, layer_ctr, col_ctr, row_ctr);
+                    c[1] = image_pick_index(data_in, row_size, layer_size, layer_ctr, col_ctr, row_ctr+1);
                     *data_out++ = max(c[0], c[1]);
                 } else if (row_ctr + 1 == row_size) {
-                    c[0] = *(data_in + (layer_ctr * layer_size) + (col_ctr * row_size) + row_ctr);
-                    c[2] = *(data_in + (layer_ctr * layer_size) + ((col_ctr + 1) * row_size) + row_ctr);
+                    c[0] = image_pick_index(data_in, row_size, layer_size, layer_ctr, col_ctr, row_ctr);
+                    c[2] = image_pick_index(data_in, row_size, layer_size, layer_ctr, col_ctr+1, row_ctr);
                     *data_out++ = max(c[0], c[2]);
                 } else {
-                    c[0] = *(data_in + (layer_ctr * layer_size) + (col_ctr * row_size) + row_ctr);
-                    c[1] = *(data_in + (layer_ctr * layer_size) + (col_ctr * row_size) + row_ctr + 1);
-                    c[2] = *(data_in + (layer_ctr * layer_size) + ((col_ctr + 1) * row_size) + row_ctr);
-                    c[3] = *(data_in + (layer_ctr * layer_size) + ((col_ctr + 1) * row_size) + row_ctr + 1);
+                    c[0] = image_pick_index(data_in, row_size, layer_size, layer_ctr, col_ctr, row_ctr);
+                    c[1] = image_pick_index(data_in, row_size, layer_size, layer_ctr, col_ctr, row_ctr+1);
+                    c[2] = image_pick_index(data_in, row_size, layer_size, layer_ctr, col_ctr+1, row_ctr);
+                    c[3] = image_pick_index(data_in, row_size, layer_size, layer_ctr, col_ctr+1, row_ctr+1);
                     *data_out++ = max(max(c[0], c[1]), max(c[2], c[3]));
                 }
             }
