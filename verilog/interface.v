@@ -76,12 +76,12 @@ module Interface(
 
         else if (master_meta == `PROTOCOL_START_IMAGE) begin
             image_memory_offset <= master_data;
-            mem_write_addr <= master_data;
+            mem_write_addr <= master_data - 1;
         end
 
         else if (master_meta == `PROTOCOL_START_FILTER) begin
             filter_memory_offset <= master_data;
-            mem_write_addr <= master_data;
+            mem_write_addr <= master_data - 1;
         end
 
         else if (master_meta == `PROTOCOL_SET_OUTPUT) begin
