@@ -31,7 +31,7 @@ struct image_struct *iprocess_maxpool(struct image_struct *s) {
                     c[1] = *(data_in + (layer_ctr * layer_size) + (col_ctr * row_size) + row_ctr + 1);
                     *data_out++ = max(c[0], c[1]);
                 } else if (row_ctr + 1 == row_size) {
-                    c[0] = *(data_in + (layer_ctr * layer_size) + (col_ctr * row_size) + row_ctr + 1);
+                    c[0] = *(data_in + (layer_ctr * layer_size) + (col_ctr * row_size) + row_ctr);
                     c[2] = *(data_in + (layer_ctr * layer_size) + ((col_ctr + 1) * row_size) + row_ctr);
                     *data_out++ = max(c[0], c[2]);
                 } else {
