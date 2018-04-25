@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item value="false" key="isRegEx"/>
+		<item value="VEC_ID" key="selection"/>
+		<item value="false" key="casesensitive"/>
+		<item value="false" key="incremental"/>
+		<item value="true" key="wrap"/>
+		<item value="false" key="wholeword"/>
+		<list key="findhistory">
+			<item value="vec_id"/>
+			<item value="fabric"/>
+			<item value="intc_0_"/>
+			<item value="intc"/>
+			<item value="interrupt"/>
+			<item value="buffer"/>
+			<item value="bd buffer"/>
+			<item value="AxiDmaInstPtr"/>
+		</list>
+		<list key="replacehistory">
+			<item value="XAxiDma"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item value="385" key="DIALOG_WIDTH"/>
+		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-18|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
+		<item value="523" key="DIALOG_HEIGHT"/>
+		<item value="1515" key="DIALOG_X_ORIGIN"/>
+		<item value="283" key="DIALOG_Y_ORIGIN"/>
+	</section>
+</section>
