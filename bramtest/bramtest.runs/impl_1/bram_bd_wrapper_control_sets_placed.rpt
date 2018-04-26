@@ -1,0 +1,83 @@
+Copyright 1986-2017 Xilinx, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2017.4 (win64) Build 2086221 Fri Dec 15 20:55:39 MST 2017
+| Date         : Mon Apr 23 17:25:40 2018
+| Host         : karanraj-win running 64-bit major release  (build 9200)
+| Command      : report_control_sets -verbose -file bram_bd_wrapper_control_sets_placed.rpt
+| Design       : bram_bd_wrapper
+| Device       : xc7z020
+--------------------------------------------------------------------------------------------
+
+Control Set Information
+
+Table of Contents
+-----------------
+1. Summary
+2. Flip-Flop Distribution
+3. Detailed Control Set Information
+
+1. Summary
+----------
+
++----------------------------------------------------------+-------+
+|                          Status                          | Count |
++----------------------------------------------------------+-------+
+| Number of unique control sets                            |    17 |
+| Unused register locations in slices containing registers |    44 |
++----------------------------------------------------------+-------+
+
+
+2. Flip-Flop Distribution
+-------------------------
+
++--------------+-----------------------+------------------------+-----------------+--------------+
+| Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
++--------------+-----------------------+------------------------+-----------------+--------------+
+| No           | No                    | No                     |              44 |           15 |
+| No           | No                    | Yes                    |               0 |            0 |
+| No           | Yes                   | No                     |              36 |           16 |
+| Yes          | No                    | No                     |              32 |            6 |
+| Yes          | No                    | Yes                    |               0 |            0 |
+| Yes          | Yes                   | No                     |             164 |           46 |
++--------------+-----------------------+------------------------+-----------------+--------------+
+
+
+3. Detailed Control Set Information
+-----------------------------------
+
++------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------+------------------+----------------+
+|                  Clock Signal                  |                                                         Enable Signal                                                         |                                                              Set/Reset Signal                                                             | Slice Load Count | Bel Load Count |
++------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------+------------------+----------------+
+|  bram_bd_i/processing_system7_0/inst/FCLK_CLK0 |                                                                                                                               | bram_bd_i/rst_ps7_0_100M/U0/EXT_LPF/lpf_int                                                                                               |                1 |              4 |
+|  bram_bd_i/processing_system7_0/inst/FCLK_CLK0 | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_WR_CHNL/wrdata_reg_ld                           | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_WR_CHNL/p_2_out                                             |                2 |              4 |
+|  bram_bd_i/processing_system7_0/inst/FCLK_CLK0 | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_RD_CHNL/FSM_sequential_rd_data_sm_cs[3]_i_1_n_0 | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_RD_CHNL/I_WRAP_BRST/SR[0]                                   |                4 |              4 |
+|  bram_bd_i/processing_system7_0/inst/FCLK_CLK0 | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_WR_CHNL/BID_FIFO/bid_fifo_not_empty             | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_RD_CHNL/I_WRAP_BRST/SR[0]                                   |                1 |              4 |
+|  bram_bd_i/processing_system7_0/inst/FCLK_CLK0 | bram_bd_i/rst_ps7_0_100M/U0/SEQ/seq_cnt_en                                                                                    | bram_bd_i/rst_ps7_0_100M/U0/SEQ/SEQ_COUNTER/clear                                                                                         |                1 |              6 |
+|  bram_bd_i/processing_system7_0/inst/FCLK_CLK0 | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_RD_CHNL/brst_cnt[7]_i_1_n_0                     | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_RD_CHNL/I_WRAP_BRST/SR[0]                                   |                4 |              8 |
+|  bram_bd_i/processing_system7_0/inst/FCLK_CLK0 | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_RD_CHNL/I_WRAP_BRST/E[0]                        | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_WR_CHNL/I_WRAP_BRST/ADDR_SNG_PORT.bram_addr_int_reg[2]_0[0] |                4 |             10 |
+|  bram_bd_i/processing_system7_0/inst/FCLK_CLK0 | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_RD_CHNL/GEN_RID_SNG.axi_rid_int[11]_i_2_n_0     | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_RD_CHNL/p_3_out                                             |                3 |             12 |
+|  bram_bd_i/processing_system7_0/inst/FCLK_CLK0 | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_WR_CHNL/BID_FIFO/E[0]                           | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_RD_CHNL/I_WRAP_BRST/SR[0]                                   |                3 |             12 |
+|  bram_bd_i/processing_system7_0/inst/FCLK_CLK0 | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_WR_CHNL/BID_FIFO/CI                             |                                                                                                                                           |                2 |             12 |
+|  bram_bd_i/processing_system7_0/inst/FCLK_CLK0 | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/GEN_ARB.I_SNG_PORT/E[0]                           | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_RD_CHNL/I_WRAP_BRST/SR[0]                                   |                5 |             13 |
+|  bram_bd_i/processing_system7_0/inst/FCLK_CLK0 | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/GEN_ARB.I_SNG_PORT/ar_active_re                   | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_RD_CHNL/I_WRAP_BRST/SR[0]                                   |                7 |             27 |
+|  bram_bd_i/processing_system7_0/inst/FCLK_CLK0 |                                                                                                                               | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_RD_CHNL/I_WRAP_BRST/SR[0]                                   |               15 |             32 |
+|  bram_bd_i/processing_system7_0/inst/FCLK_CLK0 | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_WR_CHNL/wrdata_reg_ld                           |                                                                                                                                           |                6 |             32 |
+|  bram_bd_i/processing_system7_0/inst/FCLK_CLK0 | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_RD_CHNL/axi_rdata_en                            | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_RD_CHNL/p_3_out                                             |                5 |             32 |
+|  bram_bd_i/processing_system7_0/inst/FCLK_CLK0 | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_RD_CHNL/rd_skid_buf_ld                          | bram_bd_i/axi_bram_ctrl_0/U0/gext_inst.abcv4_0_ext_inst/GEN_AXI4.I_FULL_AXI/I_RD_CHNL/I_WRAP_BRST/SR[0]                                   |                7 |             32 |
+|  bram_bd_i/processing_system7_0/inst/FCLK_CLK0 |                                                                                                                               |                                                                                                                                           |               16 |             46 |
++------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------+------------------+----------------+
+
+
++--------+-----------------------+
+| Fanout | Number of ControlSets |
++--------+-----------------------+
+| 4      |                     4 |
+| 6      |                     1 |
+| 8      |                     1 |
+| 10     |                     1 |
+| 12     |                     3 |
+| 13     |                     1 |
+| 16+    |                     6 |
++--------+-----------------------+
+
+
