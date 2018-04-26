@@ -4,6 +4,7 @@
 #include "image.h"
 
 struct image_struct *iprocess_maxpool(struct image_struct *s);
+struct image_struct *iprocess_lrn(struct image_struct *s);
 // Also here if/when we need them:
 // head layer
 // lrn layers
