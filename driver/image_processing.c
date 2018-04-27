@@ -1,11 +1,11 @@
-#include <math.h>
+#include <math.h> // powf
 
 #include "image_processing.h"
 #include "image.h"
 
 #define max(x, y) ((x > y) ? x : y)
 
-inline int image_pick_index(int *start, int row_size, int layer_size, int z, int y, int x) {
+int image_pick_index(int *start, int row_size, int layer_size, int z, int y, int x) {
     return *(start + (layer_size * z) + (row_size * y) + x);
 }
 

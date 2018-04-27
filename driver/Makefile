@@ -3,7 +3,10 @@ OBJS=$(SRCS:.c=.o)
 HEAD=$(SRCS:.c=.h)
 
 all: $(OBJS)
-	gcc -o test test.c $(OBJS)
+	gcc -o test test.c $(OBJS) -lm
+
+image_processing.o: image_processing.c
+	gcc -c -o image_processing.o image_processing.c -lm
 
 .c.o: 
 	gcc -c -o $@ $<
