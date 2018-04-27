@@ -54,12 +54,12 @@ struct image_struct *iprocess_maxpool(struct image_struct *s) {
     return output;
 }
 
-float fixed_to_float(int x) {
+float iprocess_fixed_to_float(int x) {
     static const int point = 16;
     return ((float) x) / (1<<point);
 }
 
-int float_to_fixed(float x) {
+int iprocess_float_to_fixed(float x) {
     static const int point = 16;
     return (int) (x * (1<<point));
 }
@@ -91,12 +91,12 @@ struct image_struct *iprocess_lrn(struct image_struct *s) {
         for (ii=-(n/2); ii<(n/2)+1; ii++) {
             nearby_idx = output_idx + (layer_size * ii);
             if (nearby_idx >= 0 && nearby_idx < full_length) {
-                nearby_response = fixed_to_float(*(data_in + nearby_idx));
+                nearby_response = iprocess_fixed_to_float(*(data_in + nearby_idx));
                 response += a * powf(nearby_response, 2);
             }
         }
-        response = fixed_to_float(*(data_in + output_idx)) / powf(response, b);
-        *(data_out + output_idx) = float_to_fixed(response);
+        response = iprocess_fixed_to_float(*(data_in + output_idx)) / powf(response, b);
+        *(data_out + output_idx) = iprocess_float_to_fixed(response);
     }
     
     return output;
