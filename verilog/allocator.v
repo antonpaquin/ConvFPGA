@@ -191,24 +191,31 @@ module Allocator(
     // a buffer, so that image data and filter data don't need to be perfectly
     // synchronized. We can still take in weights for either until the buffer
     // is filled, and the DSP will go through these values as fast as it can.
-    Ramb18Emu ramb (
+    Ramb18Emu ramb_a (
         // Each block RAM provides 1k of 18-bit values, with 2 read lines and
         // 2 write lines.
-        .read_addr_a(ramb_read_a_addr),
-        .read_data_a(ramb_read_a_data),
-        .read_addr_b(ramb_read_b_addr),
-        .read_data_b(ramb_read_b_data),
+        .read_addr(ramb_read_a_addr),
+        .read_data(ramb_read_a_data),
 
-        .write_addr_a(ramb_writ_a_addr),
-        .write_data_a(ramb_writ_a_data),
-        .write_en_a  (ramb_writ_a_en),
+        .write_addr(ramb_writ_a_addr),
+        .write_data(ramb_writ_a_data),
+        .write_en  (ramb_writ_a_en),
 
-        .write_addr_b(ramb_writ_b_addr),
-        .write_data_b(ramb_writ_b_data),
-        .write_en_b  (ramb_writ_b_en),
 
         .clk(clk)
     );
+
+    Ramb18Emu ramb_b (
+        .read_addr(ramb_read_b_addr),
+        .read_data(ramb_read_b_data),
+
+        .write_addr(ramb_writ_b_addr),
+        .write_data(ramb_writ_b_data),
+        .write_en  (ramb_writ_b_en),
+
+        .clk(clk)
+    );
+
 
 endmodule
 `endif // _include_allocator_

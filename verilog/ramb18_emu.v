@@ -17,21 +17,14 @@
 module Ramb18Emu(
         // Read signals -- every cycle, the output will be written with the
         // contents of the memory at the given address
-        input  wire [ 9:0] read_addr_a,
-        output reg  [17:0] read_data_a,
+        input  wire [ 9:0] read_addr,
+        output reg  [17:0] read_data,
 
-        input  wire [ 9:0] read_addr_b,
-        output reg  [17:0] read_data_b,
-        
         // Write signals -- when write_en is high, the input data will be
         // written to the specified address.
-        input  wire [ 9:0] write_addr_a,
-        input  wire [17:0] write_data_a,
-        input  wire        write_en_a,
-
-        input  wire [ 9:0] write_addr_b,
-        input  wire [17:0] write_data_b,
-        input  wire        write_en_b,
+        input  wire [ 9:0] write_addr,
+        input  wire [17:0] write_data,
+        input  wire        write_en,
 
         input  wire        clk
     );
@@ -41,24 +34,15 @@ module Ramb18Emu(
     // Two independent write signals, which will each write an 18-bit value to
     // the appropriate address every cycle write_en is high
     always @(posedge clk) begin
-        if (write_en_a) begin
-            memory[write_addr_a] <= write_data_a;
+        if (write_en) begin
+            memory[write_addr] <= write_data;
             // This is a debug line, which we can uncomment to see memory
             // writes as they occur (in simulation).
             //$display("%d --> [%d]", write_data_a, write_addr_a);
         end
     end
     
-    always @(posedge clk) begin
-        if (write_en_b) begin
-            memory[write_addr_b] <= write_data_b;
-            //$display("%d --> [%d]", write_data_b, write_addr_b);
-        end
-    end
-    
-    // The RAMB18 can read from 2 addresses per cycle
-    always @(posedge clk) read_data_a <= memory[read_addr_a];
-    always @(posedge clk) read_data_b <= memory[read_addr_b];
+    always @(posedge clk) read_data <= memory[read_addr];
 
 endmodule
 
