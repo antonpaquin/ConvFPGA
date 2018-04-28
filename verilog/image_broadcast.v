@@ -48,7 +48,7 @@
  */
 module ImageBroadcast(
         // Memory signals -- we need read access to image memory
-        output wire [15:0] ramb_read_addr,
+        output wire [20:0] ramb_read_addr,
         input  wire [17:0] ramb_read_data,
         
         // Description of the image
