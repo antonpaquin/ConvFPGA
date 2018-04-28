@@ -57,7 +57,7 @@ int main() {
     img[2] = conv(img[1], 1, 96, 5, 2, 0);
     image_free(img[1]);
 
-    img[3] = iprocess_maxpool(img[2]);
+    img[3] = iprocess_maxpool(img[2], 2);
     image_free(img[2]);
 
     img[4] = iprocess_lrn(img[3]);
@@ -66,7 +66,7 @@ int main() {
     img[5] = conv(img[4], 2, 256, 5, 1, 0);
     image_free(img[4]);
 
-    img[6] = iprocess_maxpool(img[5]);
+    img[6] = iprocess_maxpool(img[5], 3);
     image_free(img[5]);
 
     img[7] = iprocess_lrn(img[6]);
@@ -81,7 +81,7 @@ int main() {
     img[10] = conv(img[9], 5, 256, 3, 1, 0);
     image_free(img[9]);
 
-    img[11] = iprocess_maxpool(img[10]);
+    img[11] = iprocess_maxpool(img[10], 3);
     image_free(img[10]);
 
     img[12] = iprocess_lrn(img[11]);
