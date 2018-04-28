@@ -1,0 +1,5 @@
+15:04:20 INFO  : Processing command line option -hwspec /ad/eng/users/d/o/doved/axi4_tutorial/axi4_tutorial.sdk/design_1_wrapper.hdf.
+15:04:29 INFO  : Launching XSDB server: xsdb -s /ad/eng/support/software/linux/all/x86_64/Xilinx/SDK/2014.4/scripts/xsdb/xsdb/xsdb-server.tcl 2450
+15:08:14 INFO  : Processing command line option -hwspec /ad/eng/users/d/o/doved/axi4_tutorial/axi4_tutorial.sdk/design_1_wrapper.hdf.
+15:08:15 INFO  : Checking for hwspec changes in the project design_1_wrapper_hw_platform_0.
+15:11:48 INFO  : Processing command line option -hwspec /ad/eng/users/d/o/doved/Desktop/axi_dan_cole/axi_dan_cole.sdk/design_1_wrapper.hdf.
