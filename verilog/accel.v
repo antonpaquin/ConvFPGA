@@ -111,8 +111,8 @@ module Accel(
     // accurate. The issue stages assume that their data starts at address 0,
     // so if we need to store it somewhere else we just add a constant offset.
     // This is that computation for image memory
-    wire [15:0] imem_read_addr_virt;
-    wire [15:0] imem_read_addr_phys;
+    wire [20:0] imem_read_addr_virt;
+    wire [20:0] imem_read_addr_phys;
     wire [17:0] imem_read_data;
 
     assign imem_read_addr_phys = imem_read_addr_virt + image_memory_offset;

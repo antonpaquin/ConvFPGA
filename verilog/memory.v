@@ -14,7 +14,7 @@
  * systolic filter data (see "systolics.txt").
  */
 module Memory(
-        input  wire [15:0] read_addr_a,
+        input  wire [20:0] read_addr_a,
         output reg  [17:0] read_data_a,
 
         input  wire [15:0] read_addr_b,
