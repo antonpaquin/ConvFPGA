@@ -39,6 +39,17 @@ int filter_read_file(struct filter_struct *s, const char *fname) {
     
     data = s -> data;
 
+    in_buf[0] = fgetc(fp);
+    in_buf[1] = fgetc(fp);
+    in_buf[2] = fgetc(fp);
+    in_buf[3] = fgetc(fp);
+    s -> bias = (
+        ((in_buf[0] & 0xFF) <<  0) |
+        ((in_buf[1] & 0xFF) <<  8) |
+        ((in_buf[2] & 0xFF) << 16) |
+        ((in_buf[3] & 0xFF) << 24)
+    );
+
     while ((in_buf[0] = fgetc(fp)) != EOF) {
         in_buf[1] = fgetc(fp);
         in_buf[2] = fgetc(fp);

@@ -1,4 +1,17 @@
-def weight_dump(fname, arr):
+def weight_dump_filter(fname, arr, filter_bias):
+    with open(fname, 'wb') as out_f:
+        dump(filter_bias, out_f)
+        dump(arr, out_f)
+
+def weight_dump_image(fname, arr):
+    with open(fname, 'wb') as out_f:
+        dump(arr, out_f)
+
+def weight_dump_fc_w(fname, arr):
+    with open(fname, 'wb') as out_f:
+        dump(arr, out_f)
+
+def weight_dump_fc_b(fname, arr):
     with open(fname, 'wb') as out_f:
         dump(arr, out_f)
 
