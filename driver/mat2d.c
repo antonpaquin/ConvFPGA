@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "mat2d.h"
 #include "image.h"
@@ -23,13 +24,38 @@ struct mat2d *mat2d_convert_flatten_image(struct image_struct *s) {
     full_length = image_get_len(s);
     input_data = image_get_data_ptr(s);
 
-    output = mat2d_alloc(1, full_length);
+    output = mat2d_alloc(full_length, 1);
 
     for (ii=0; ii<full_length; ii++) {
         *((output -> data) + ii) = mat2d_fixed_to_float(*(input_data + ii));
     }
 
     return output;
+}
+
+int mat2d_read_file(struct mat2d *m, const char *fname) {
+    FILE *fp;
+    float *data;
+    int in_buf[4];
+
+    fp = fopen(fname, "r");
+    if (fp == NULL)
+        return -1;
+
+    data = m -> data;
+
+    while ((in_buf[0] = fgetc(fp)) != EOF) {
+        in_buf[1] = fgetc(fp);
+        in_buf[2] = fgetc(fp);
+        in_buf[3] = fgetc(fp);
+        *data++ = (
+            ((in_buf[0] & 0xFF) <<  0) |
+            ((in_buf[1] & 0xFF) <<  8) |
+            ((in_buf[2] & 0xFF) << 16) |
+            ((in_buf[3] & 0xFF) << 24)
+        );
+    }
+    return 0;
 }
 
 struct mat2d *mat2d_alloc(int rows, int cols) {

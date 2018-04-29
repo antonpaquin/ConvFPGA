@@ -6,6 +6,7 @@
 struct mat2d;
 
 struct mat2d *mat2d_convert_flatten_image(struct image_struct *s);
+int mat2d_read_file(struct mat2d *m, const char *fname);
 struct mat2d *mat2d_alloc(int rows, int cols); 
 void mat2d_free(struct mat2d *m);
 
