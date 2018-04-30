@@ -34,17 +34,18 @@
 	);
 	// function called clogb2 that returns an integer which has the 
 	// value of the ceiling of the log base 2.
-	function integer clogb2 (input integer bit_depth);
-	  begin
-	    for(clogb2=0; bit_depth>0; clogb2=clogb2+1)
-	      bit_depth = bit_depth >> 1;
-	  end
-	endfunction
+	// function integer clogb2 (input integer bit_depth);
+	//   begin
+	//     for(clogb2=0; bit_depth>0; clogb2=clogb2+1)
+	//       bit_depth = bit_depth >> 1;
+	//   end
+	// endfunction
 
 	// Total number of input data.
 	localparam NUMBER_OF_INPUT_WORDS  = 16;
 	// bit_num gives the minimum number of bits needed to address 'NUMBER_OF_INPUT_WORDS' size of FIFO.
-	localparam bit_num  = clogb2(NUMBER_OF_INPUT_WORDS-1);
+	// localparam bit_num  = clogb2(NUMBER_OF_INPUT_WORDS-1);
+	localparam bit_num = 4;
 	// Define the states of state machine
 	// The control state machine oversees the writing of input streaming data to the FIFO,
 	// and outputs the streaming data from the FIFO
