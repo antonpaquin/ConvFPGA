@@ -1,6 +1,4 @@
-#include <cblas.h> // cblas_sgemv
 #include <math.h> // expf
-#include <string.h> // memcpy
 
 #include "head.h"
 #include "mat2d.h"
@@ -9,25 +7,30 @@ struct mat2d *head_fc(struct mat2d *a, struct mat2d *w, struct mat2d *b) {
     // (w * a) + b
     struct mat2d *res;
 
+    int a_row_ctr, col_ctr;
+    int rows_a_in;
+    int rows_out;
+    float cur;
+
+    float *data_a, *data_w, *data_b, *data_r;
+
     res = mat2d_alloc(1, mat2d_get_cols(w));
 
-    // Add bias to res first
-    memcpy(mat2d_get_data_ptr(res), mat2d_get_data_ptr(b), mat2d_get_len(b));
+    rows_a_in = mat2d_get_rows(a);
+    rows_out = mat2d_get_cols(a);
 
-    cblas_sgemv(
-        CblasRowMajor,           // w stores data in row-major order
-        CblasNoTrans,            // don't transpose w
-        mat2d_get_rows(w),       // M = num rows of w
-        mat2d_get_cols(w),       // N = num cols of w
-        1,                       // alpha = scale output by 1
-        mat2d_get_data_ptr(w),   // *A = w data
-        mat2d_get_cols(w),       // lda = leading dimension of w (cols for row-major)
-        mat2d_get_data_ptr(a),   // *X = a data
-        1,                       // incX = a stores data at every address
-        1,                       // beta = add res (currently contains bias)
-        mat2d_get_data_ptr(res), // *Y = res data
-        1                        // incY = res stores data at every address
-    );
+    data_a = mat2d_get_data_ptr(a);
+    data_b = mat2d_get_data_ptr(b);
+    data_r = mat2d_get_data_ptr(res);
+
+    for (a_row_ctr=0; a_row_ctr<rows_a_in; a_row_ctr++) {
+        data_w = mat2d_get_data_ptr(w);
+        cur = *(data_b++);
+        for (col_ctr=0; col_ctr<rows_out; col_ctr++) {
+            cur += (*(data_w++) * *(data_a++));
+        }
+        *(data_r++) = cur;
+    }
 
     return res;
 }
