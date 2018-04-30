@@ -1,0 +1,15 @@
+net: "train_val.prototxt"
+test_iter: 5
+test_interval: 10
+base_lr: 0.01
+lr_policy: "step"
+gamma: 0.1
+stepsize: 300
+display: 20
+max_iter: 450000
+momentum: 0.9
+weight_decay: 0.0005
+snapshot: 10000
+snapshot_prefix: "flower"
+solver_mode: CPU
+solver_type: SGD
