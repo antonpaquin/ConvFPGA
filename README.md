@@ -15,7 +15,7 @@ The driver is a C program that connects to an imaginary interface with the board
 ## Network
 We trained a neural network to classify images with 18-bit fixed point operations. The network is based around the AlexNet architecture, and involves 6 convolution operations.
 
-##Directory Structure
+## Directory Structure
 
 Neural_Nets -- Modified AlexNet implementation
 
