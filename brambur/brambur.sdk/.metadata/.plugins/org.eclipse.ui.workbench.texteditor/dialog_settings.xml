@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item value="false" key="isRegEx"/>
+		<item value="curr_bram_id" key="selection"/>
+		<item value="false" key="casesensitive"/>
+		<item value="false" key="incremental"/>
+		<item value="true" key="wrap"/>
+		<item value="false" key="wholeword"/>
+		<list key="findhistory">
+			<item value="curr_bram_id"/>
+			<item value="NUM_BRAM_CTRL"/>
+			<item value="bram_ctrls"/>
+			<item value="bram_ctrl_ids"/>
+			<item value="brams"/>
+			<item value="status"/>
+			<item value="numby"/>
+			<item value="f_mk"/>
+		</list>
+		<list key="replacehistory">
+			<item value="NUM_BRAM"/>
+			<item value="brams"/>
+			<item value="bram_ids"/>
+			<item value="bram_ctrls"/>
+		</list>
+	</section>
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
+		<item value="385" key="DIALOG_WIDTH"/>
+		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-18|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
+		<item value="523" key="DIALOG_HEIGHT"/>
+		<item value="1263" key="DIALOG_X_ORIGIN"/>
+		<item value="235" key="DIALOG_Y_ORIGIN"/>
+	</section>
+</section>
