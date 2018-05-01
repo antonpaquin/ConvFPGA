@@ -14,3 +14,23 @@ The driver is a C program that connects to an imaginary interface with the board
 
 ## Network
 We trained a neural network to classify images with 18-bit fixed point operations. The network is based around the AlexNet architecture, and involves 6 convolution operations.
+
+##Directory Structure
+
+Neural_Nets -- Modified AlexNet implementation
+
+brambur/brambur.sdk/brambur0 -- Transfer data (weights) from processor memory to block RAM on programmable logic
+
+dataip2_1.0 -- Custom IP to interface with DMA. Its purpose is to get data stream from DMA, broadcast as needed, and stream data back to DMA. It implements read and write through AXI4 Stream protocol
+
+dma2/dma2.sdk/poll -- Transfer data (image and intermediate results) from processor memory to programmable logic for broadcast, via the DMA
+
+dma2/dma2.sdk/eth -- Transfer data from external source to processor memory
+
+driver -- See description above
+
+python_architecture, python_weightdump -- Python simulations
+
+verilog -- Accelerator implementation
+
+axiModule, bramtest, data0, dataip, verilog/Filter -- Experiment and development files
