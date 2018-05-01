@@ -4,7 +4,7 @@
 	module dataip2_v1_0 #
 	(
 		// Users to add parameters here
-
+        parameter integer pkt_size = 8,
 		// User parameters ends
 		// Do not modify the parameters beyond this line
 
@@ -76,7 +76,7 @@
     wire slave_done;
 
 	// data to be streamed out
-	localparam NUMBER_OF_OUTPUT_WORDS = 32;
+	localparam NUMBER_OF_OUTPUT_WORDS = 8;
 //	wire [4:0] num_words_to_send = NUMBER_OF_OUTPUT_WORDS;
 	wire [C_M00_AXIS_TDATA_WIDTH-1:0] words_to_send[0:NUMBER_OF_OUTPUT_WORDS-1];
 	assign words_to_send[0] = 32'h1010101;
@@ -87,30 +87,30 @@
     assign words_to_send[5] = 32'h6060606;
     assign words_to_send[6] = 32'h7070707;
     assign words_to_send[7] = 32'h8080808;
-    assign words_to_send[8] = 32'h9090909;
-    assign words_to_send[9] = 32'ha0a0a0a;
-    assign words_to_send[10] = 32'hb0b0b0b;
-    assign words_to_send[11] = 32'hc0c0c0c;
-    assign words_to_send[12] = 32'hd0d0d0d;
-    assign words_to_send[13] = 32'he0e0e0e;
-    assign words_to_send[14] = 32'hf0f0f0f;
-    assign words_to_send[15] = 32'hdeadbeef;
-    assign words_to_send[16] = 32'h1010101;
-    assign words_to_send[17] = 32'h2020202;
-    assign words_to_send[18] = 32'h3030303;
-    assign words_to_send[19] = 32'h4040404;
-    assign words_to_send[21] = 32'h5050505;
-    assign words_to_send[22] = 32'h6060606;
-    assign words_to_send[23] = 32'h7070707;
-    assign words_to_send[24] = 32'h8080808;
-    assign words_to_send[25] = 32'h9090909;
-    assign words_to_send[26] = 32'ha0a0a0a;
-    assign words_to_send[27] = 32'hb0b0b0b;
-    assign words_to_send[28] = 32'hc0c0c0c;
-    assign words_to_send[29] = 32'hd0d0d0d;
-    assign words_to_send[30] = 32'he0e0e0e;
-    assign words_to_send[31] = 32'hf0f0f0f;
-    assign words_to_send[20] = 32'hdeadbeef;
+//    assign words_to_send[8] = 32'h9090909;
+//    assign words_to_send[9] = 32'ha0a0a0a;
+//    assign words_to_send[10] = 32'hb0b0b0b;
+//    assign words_to_send[11] = 32'hc0c0c0c;
+//    assign words_to_send[12] = 32'hd0d0d0d;
+//    assign words_to_send[13] = 32'he0e0e0e;
+//    assign words_to_send[14] = 32'hf0f0f0f;
+//    assign words_to_send[15] = 32'hdeadbeef;
+//    assign words_to_send[16] = 32'h1010101;
+//    assign words_to_send[17] = 32'h2020202;
+//    assign words_to_send[18] = 32'h3030303;
+//    assign words_to_send[19] = 32'h4040404;
+//    assign words_to_send[21] = 32'h5050505;
+//    assign words_to_send[22] = 32'h6060606;
+//    assign words_to_send[23] = 32'h7070707;
+//    assign words_to_send[24] = 32'h8080808;
+//    assign words_to_send[25] = 32'h9090909;
+//    assign words_to_send[26] = 32'ha0a0a0a;
+//    assign words_to_send[27] = 32'hb0b0b0b;
+//    assign words_to_send[28] = 32'hc0c0c0c;
+//    assign words_to_send[29] = 32'hd0d0d0d;
+//    assign words_to_send[30] = 32'he0e0e0e;
+//    assign words_to_send[31] = 32'hf0f0f0f;
+//    assign words_to_send[20] = 32'hdeadbeef;
 
 //	reg [3:0] idx = 0;
 //	reg [C_M00_AXIS_TDATA_WIDTH-1:0] word_to_send;
@@ -156,15 +156,15 @@
 	// 		counter <= 0;
 	// 	end
 	// end
-
-	wire start_tx = slave_done;
+	reg num_tx_left = 1;
+	wire start_tx = slave_done && (num_tx_left!=0);
 
 	localparam SENDING = 1;
 	localparam IDLE = 0;
 
 	reg [5:0] num_words_to_send = 32;
 	reg [5:0] num_words_sent = 0;
-	reg [4:0] pkt_size = 16;
+//	reg [5:0] pkt_size = 32;
 	reg state;
 	// wire tx_en;
 
@@ -205,6 +205,7 @@
 						begin
 							state <= IDLE;
 							num_words_sent <= 0;
+							num_tx_left <= 0;
 						end
 						else
 						begin
@@ -216,7 +217,7 @@
 				endcase // state
 			end // m00_axis_tready
 
-			else
+			else if (num_words_sent == num_words_to_send)
 			begin
 				state <= IDLE;
 				num_words_sent <= 0;	
